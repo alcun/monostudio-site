@@ -1,0 +1,28 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import ScreenshotGallery from '../components/ScreenshotGallery.astro';
+---
+
+<AppLayout
+  name="Fork"
+  tagline="Stillness means in tune."
+  description="A chromatic tuner that does one thing well. Point it at your guitar and it listens - the note settles, the screen goes still. Chromatic by default, with guitar string detection and reference pitch from 430 to 450 Hz. No ads, no accounts, nothing leaves your device."
+  status="on the app store"
+  appStoreUrl="https://apps.apple.com/app/fork-chromatic-tuner/id6772554425"
+>
+  <svg slot="icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(30 27)">
+      <line x1="-8" y1="-16" x2="-8" y2="5" stroke="#2A2A28" stroke-width="3" stroke-linecap="round"></line>
+      <line x1="8" y1="-16" x2="8" y2="5" stroke="#2A2A28" stroke-width="3" stroke-linecap="round"></line>
+      <path d="M -8 5 Q -8 11 -2.5 11 L 2.5 11 Q 8 11 8 5" stroke="#2A2A28" stroke-width="3" stroke-linecap="round" fill="none"></path>
+      <line x1="0" y1="11" x2="0" y2="22" stroke="#2A2A28" stroke-width="3" stroke-linecap="round"></line>
+    </g>
+  </svg>
+
+  <ScreenshotGallery images={[
+    { src: '/fork/1.png', alt: 'Fork - stillness means in tune', width: 1242, height: 2688 },
+    { src: '/fork/2.png', alt: 'Fork - chromatic mode', width: 1242, height: 2688 },
+    { src: '/fork/3.png', alt: 'Fork - guitar mode', width: 1242, height: 2688 },
+    { src: '/fork/4.png', alt: 'Fork - reference settings', width: 1242, height: 2688 },
+  ]} />
+</AppLayout>

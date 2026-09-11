@@ -1,0 +1,169 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  name: string;
+  tagline: string;
+  description?: string;
+  status: 'in review' | 'on the app store' | 'coming soon' | 'on testflight';
+  appStoreUrl?: string;
+}
+
+const defaults: Record<string, string> = {
+  Enso: 'A daily practice in a single gesture. Draw one circle a day and watch the year fill in. No accounts, no cloud, just the habit.',
+  Bins: 'Never miss a collection again. Set your schedule once and get a quiet nudge the night before. Recycling, general, garden: sorted.',
+  Dose: 'A dead-simple reminder for the one thing you take daily. Tap to confirm, and the day goes quiet. No charts, no clutter.',
+  Grateful: "A gratitude journal stripped to its essence. One line a day, kept private on your device. That's the whole app.",
+  'Bare Minimum': "A to-do list that refuses to grow. Three things a day, no more. When they're done, you're done.",
+};
+
+const { name, tagline, description, status, appStoreUrl } = Astro.props;
+const copy = description ?? defaults[name];
+const statusLabel = status === 'on the app store' ? 'On the App Store' : status === 'on testflight' ? 'TestFlight beta' : status === 'in review' ? 'In review' : 'Coming soon';
+const hasScreens = Astro.slots.has('default');
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name,
+  description: copy ?? tagline,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  operatingSystem: 'iOS',
+  applicationCategory: 'LifestyleApplication',
+  author: { '@type': 'Organization', name: 'Mono Studio', url: 'https://monostudio.site' },
+  ...(appStoreUrl ? { downloadUrl: appStoreUrl } : {}),
+};
+---
+
+<BaseLayout title={`${name} - Mono Studio`} description={copy ?? tagline} schema={appSchema}>
+  <style>
+    .page { position: relative; min-height: 100vh; overflow: hidden; }
+    .ambient { display: none; }
+    .aura { position: absolute; border-radius: 50%; filter: blur(76px); }
+    .aura-one { width: 340px; height: 340px; left: -130px; top: -50px; background: var(--primary-soft); }
+    .aura-two { width: 440px; height: 440px; right: -170px; top: 300px; background: var(--accent); }
+    .aura-three { width: 350px; height: 350px; left: 28%; bottom: -120px; background: var(--primary-soft); opacity: 0.5; }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 48px 32px 100px;
+      opacity: 0;
+      animation: breatheIn 0.8s ease-out 0.1s forwards;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-soft);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .back:hover { color: var(--text); }
+    .back svg { width: 16px; transition: transform 0.3s ease; }
+    .back:hover svg { transform: translateX(-3px); }
+
+    .app-header { display: flex; align-items: center; gap: 20px; margin-top: 52px; }
+    .app-icon-tile {
+      flex-shrink: 0;
+      width: 68px;
+      height: 68px;
+      border-radius: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+    .app-icon-tile :global(svg) { width: 34px; height: 34px; display: block; }
+    .app-icon-tile :global([stroke="#2A2A28"]) { stroke: currentColor; }
+    .app-icon-tile :global([fill="#2A2A28"]) { fill: currentColor; }
+
+    h1 {
+      font-family: "Noto Serif JP", serif;
+      font-weight: 300;
+      font-size: 42px;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      line-height: 1.05;
+    }
+    .tagline { margin-top: 7px; font-size: 15px; font-weight: 300; color: var(--text-soft); }
+
+    .divider { display: flex; align-items: center; justify-content: center; padding: 48px 0; }
+    .divider-line { width: 64px; height: 1px; background: var(--border); }
+    .divider-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-faint); margin: 0 14px; }
+
+    .intro { max-width: 600px; margin: 0 auto; text-align: center; }
+    .description { font-size: 16px; font-weight: 300; color: color-mix(in srgb, var(--text) 82%, transparent); line-height: 1.8; text-align: left; }
+    .status { display: inline-flex; align-items: center; gap: 7px; margin-top: 28px; font-size: 12px; letter-spacing: 0.04em; color: var(--text-soft); }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-faint); }
+    .status-dot.live { background: var(--sage); }
+    .status-dot.beta { background: var(--amber); }
+
+    .app-store-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 22px;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      background-color: var(--sage-soft);
+      border-color: color-mix(in srgb, var(--sage) 35%, var(--border));
+      color: var(--sage-deep);
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 12px 28px -24px var(--sage-deep);
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .app-store-link:hover { background-color: color-mix(in srgb, var(--sage-soft) 72%, var(--sage)); border-color: color-mix(in srgb, var(--sage) 52%, var(--border)); color: var(--sage-deep); box-shadow: inset 0 1px 0 var(--glass-highlight), 0 14px 28px -22px var(--sage); }
+    .app-store-mark { width: 15px; height: 15px; flex-shrink: 0; }
+    .app-store-arrow { width: 16px; transition: transform 0.2s cubic-bezier(0.2, 0.75, 0.25, 1); }
+    .app-store-link:hover .app-store-arrow { transform: translateX(2px); }
+
+    .screens { margin-top: 64px; }
+    .screens :global(> div) { margin: 0 !important; }
+    .screens :global(> div > div) { padding-left: 8px !important; padding-right: 8px !important; justify-content: center; }
+    .screens :global(img) { border: 1px solid var(--border); box-shadow: 0 18px 42px -24px var(--glass-shadow) !important; }
+
+    .footer { margin-top: 110px; padding-top: 30px; border-top: 1px solid var(--border); text-align: center; }
+    .footer-copy { font-size: 11px; color: var(--text-faint); letter-spacing: 0.5px; }
+
+    @media (max-width: 620px) {
+      .container { padding: 34px 24px 80px; }
+      .app-header { margin-top: 48px; gap: 16px; }
+      .app-icon-tile { width: 60px; height: 60px; border-radius: 18px; }
+      h1 { font-size: 34px; }
+      .divider { padding: 40px 0; }
+      .screens { margin-top: 56px; }
+    }
+  </style>
+
+  <main class="page">
+    <div class="ambient" aria-hidden="true"><div class="aura aura-one"></div><div class="aura aura-two"></div><div class="aura aura-three"></div></div>
+    <div class="container">
+      <a href="/" class="back"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"></path></svg>Mono Studio</a>
+
+      <header class="app-header">
+        <div class="app-icon-tile glass"><slot name="icon" /></div>
+        <div><h1>{name}</h1><p class="tagline">{tagline}</p></div>
+      </header>
+
+      <div class="divider" aria-hidden="true"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+      <div class="intro">
+        {copy && <p class="description">{copy}</p>}
+        {!(status === 'on the app store' && appStoreUrl) && <div><span class="status"><i class:list={['status-dot', { live: status === 'on the app store', beta: status === 'on testflight' }]}></i>{statusLabel}</span></div>}
+        {appStoreUrl && <a href={appStoreUrl} class="app-store-link glass" target="_blank" rel="noopener"><svg class="app-store-mark" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M16.7 12.9c0-2.5 2-3.7 2.1-3.8a4.5 4.5 0 0 0-3.6-2c-1.5-.2-3 .9-3.7.9-.8 0-1.9-.9-3.2-.9a4.7 4.7 0 0 0-4 2.4c-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3.1 2.4 1.2 0 1.7-.8 3.2-.8 1.5 0 2 .8 3.3.8 1.4 0 2.2-1.2 3-2.4a10.7 10.7 0 0 0 1.4-2.9 4.1 4.1 0 0 1-2.8-3.5ZM14.2 5.5A4.2 4.2 0 0 0 15.2 2a4.3 4.3 0 0 0-3 1.7 4 4 0 0 0-1 3.3 3.6 3.6 0 0 0 3-1.5Z"></path></svg><span>Download on the App Store</span><svg class="app-store-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>}
+      </div>
+
+      {hasScreens && <div class="screens"><slot /></div>}
+      <footer class="footer"><p class="footer-copy">© 2026 Mono Studio</p></footer>
+    </div>
+  </main>
+</BaseLayout>

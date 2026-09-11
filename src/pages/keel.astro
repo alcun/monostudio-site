@@ -1,0 +1,30 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import ScreenshotGallery from '../components/ScreenshotGallery.astro';
+---
+
+<AppLayout
+  name="Keel"
+  tagline="See the trend."
+  description="A weight tracker without the noise. One number a day. A quiet line showing the trend over time. No accounts, no cloud, no notifications nagging you to log. Nothing leaves your device."
+  status="on the app store"
+  appStoreUrl="https://apps.apple.com/app/keel-weight-tracker/id6761394184"
+>
+  <svg slot="icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M 12 18 Q 18 19 24 22 T 36 30 T 50 45"
+      stroke="#2A2A28"
+      stroke-width="3"
+      stroke-linecap="round"
+      fill="none"
+    ></path>
+    <circle cx="50" cy="45" r="3.5" fill="#2A2A28"></circle>
+  </svg>
+
+  <ScreenshotGallery images={[
+    { src: '/keel/1.jpeg', alt: 'Keel - log your weight', width: 1290, height: 2796 },
+    { src: '/keel/2.jpeg', alt: 'Keel - trend over time', width: 1290, height: 2796 },
+    { src: '/keel/3.jpeg', alt: 'Keel - history view', width: 1290, height: 2796 },
+    { src: '/keel/4.jpeg', alt: 'Keel - settings', width: 1290, height: 2796 },
+  ]} />
+</AppLayout>

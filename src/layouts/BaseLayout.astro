@@ -1,0 +1,250 @@
+---
+// Fonts are self-hosted rather than pulled from Google. The site has no Japanese
+// text in it at all - Noto Serif JP is here for its Latin letterforms - so the
+// hosted css2 stylesheet was 89 KiB of @font-face blocks, 82 KiB of which were
+// unicode-ranges the site can never hit. It was also render-blocking on a third
+// party origin, which cost about a second before the first paint could happen.
+// Importing the latin subsets puts the same faces in our own bundle.
+import '@fontsource/noto-serif-jp/latin-200.css';
+import '@fontsource/noto-serif-jp/latin-300.css';
+import '@fontsource/noto-serif-jp/latin-400.css';
+import '@fontsource/karla/latin-300.css';
+import '@fontsource/karla/latin-400.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = "A studio making focused, private iPhone apps for daily practice. Each app does one thing and takes seconds.",
+  image = '/og.png',
+  schema,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.site);
+const structuredData = schema ?? {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Mono Studio',
+  url: 'https://monostudio.site',
+  email: 'hello@monostudio.site',
+  description,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4ede0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1d1e27" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mono Studio" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <script is:inline>
+      const savedTheme = localStorage.getItem('mono-theme');
+      if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+      if (location.pathname === '/' || location.pathname === '/index.html') {
+        if (sessionStorage.getItem('mono-home-seen')) document.documentElement.dataset.homeReturn = '';
+        else sessionStorage.setItem('mono-home-seen', '1');
+      }
+    </script>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        color-scheme: light;
+        --bg: #f4ede0;
+        --bg-deep: #ebe0cd;
+        --card: rgba(255, 253, 248, 0.56);
+        --text: #2a2a28;
+        --text-soft: #6e6b63;
+        --text-faint: #706b63;
+        --border: rgba(76, 68, 54, 0.11);
+        --stone: #c7c2b8;
+        --primary: #716756;
+        --primary-soft: rgba(195, 174, 139, 0.28);
+        --accent: rgba(220, 196, 156, 0.3);
+        --sage: #879985;
+        --sage-deep: #536651;
+        --sage-soft: rgba(135, 153, 133, 0.2);
+        --amber: #b58b4f;
+        --glass-highlight: rgba(255, 255, 255, 0.72);
+        --glass-shadow: rgba(87, 72, 49, 0.24);
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #1d1e27;
+        --bg-deep: #171821;
+        --card: rgba(53, 55, 73, 0.45);
+        --text: #eeeff6;
+        --text-soft: #afb3c6;
+        --text-faint: #8d91a4;
+        --border: rgba(240, 242, 255, 0.11);
+        --stone: #5e6274;
+        --primary: #a6afe0;
+        --primary-soft: rgba(129, 143, 205, 0.25);
+        --accent: rgba(104, 113, 166, 0.28);
+        --sage: #a8bba5;
+        --sage-deep: #dce7da;
+        --sage-soft: rgba(143, 166, 140, 0.2);
+        --amber: #d4aa69;
+        --glass-highlight: rgba(255, 255, 255, 0.14);
+        --glass-shadow: rgba(0, 0, 0, 0.68);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          color-scheme: dark;
+          --bg: #1d1e27;
+          --bg-deep: #171821;
+          --card: rgba(53, 55, 73, 0.45);
+          --text: #eeeff6;
+          --text-soft: #afb3c6;
+          --text-faint: #8d91a4;
+          --border: rgba(240, 242, 255, 0.11);
+          --stone: #5e6274;
+          --primary: #a6afe0;
+          --primary-soft: rgba(129, 143, 205, 0.25);
+          --accent: rgba(104, 113, 166, 0.28);
+          --sage: #a8bba5;
+          --sage-deep: #dce7da;
+          --sage-soft: rgba(143, 166, 140, 0.2);
+          --amber: #d4aa69;
+          --glass-highlight: rgba(255, 255, 255, 0.14);
+          --glass-shadow: rgba(0, 0, 0, 0.68);
+        }
+      }
+
+      html { background: var(--bg); color: var(--text); }
+      body {
+        font-family: "Karla", sans-serif;
+        background: var(--bg);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        transition: background-color 0.35s ease, color 0.35s ease;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 100;
+        opacity: 0.45;
+        mix-blend-mode: multiply;
+      }
+
+      :root[data-theme="dark"] body::before { mix-blend-mode: soft-light; opacity: 0.6; }
+      :root[data-theme="dark"] .ambient { opacity: 0; }
+      :root[data-theme="dark"] .glass::after { background: none; }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) body::before { mix-blend-mode: soft-light; opacity: 0.6; }
+        :root:not([data-theme="light"]) .ambient { opacity: 0; }
+        :root:not([data-theme="light"]) .glass::after { background: none; }
+      }
+
+      .glass {
+        position: relative;
+        background: var(--card);
+        border: 1px solid var(--border);
+        box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 rgba(45, 50, 72, 0.04), 0 18px 46px -28px var(--glass-shadow);
+        backdrop-filter: blur(22px) saturate(165%);
+        -webkit-backdrop-filter: blur(22px) saturate(165%);
+      }
+
+      .glass::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(255,255,255,0.24), transparent 44%);
+      }
+
+      .glass > * { position: relative; z-index: 1; }
+
+      .theme-toggle {
+        position: fixed;
+        z-index: 200;
+        top: 20px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border-color: var(--border);
+        color: var(--text-soft);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        transition: transform 0.25s ease, color 0.25s ease;
+      }
+
+      .theme-toggle:hover { color: var(--text); transform: translateY(-2px); }
+      .theme-toggle:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+      .theme-toggle svg { width: 18px; height: 18px; }
+      .theme-toggle .moon { display: block; }
+      .theme-toggle .sun { display: none; }
+      :root[data-theme="dark"] .theme-toggle .moon { display: none; }
+      :root[data-theme="dark"] .theme-toggle .sun { display: block; }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .theme-toggle .moon { display: none; }
+        :root:not([data-theme="light"]) .theme-toggle .sun { display: block; }
+      }
+
+      @keyframes breatheIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0ms !important; }
+      }
+    </style>
+    <slot name="head" />
+  </head>
+  <body>
+    <button class="theme-toggle glass" type="button" aria-label="Switch colour theme">
+      <svg class="moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path></svg>
+      <svg class="sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+    </button>
+    <slot />
+    <script>
+      import '../lib/loggerlizard.js';
+    </script>
+    <script is:inline>
+      document.querySelector('.theme-toggle')?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        root.dataset.theme = dark ? 'light' : 'dark';
+        localStorage.setItem('mono-theme', root.dataset.theme);
+      });
+    </script>
+  </body>
+</html>

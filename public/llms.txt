@@ -1,0 +1,23 @@
+# Mono Studio
+
+> Focused, private iPhone apps for daily practice. One thing, done well.
+
+Mono Studio makes small apps that do one useful thing, take seconds to use and keep personal data on the device by default.
+
+## Apps
+
+- [Keel](https://monostudio.site/keel): A weight tracker that shows the trend rather than daily noise. Available on the App Store.
+- [Fork](https://monostudio.site/fork): A chromatic instrument tuner that settles when the note is in tune. Available on the App Store.
+- [Enso](https://monostudio.site/enso): Draw one circle each day and watch the year fill in. In TestFlight.
+- [Bins](https://monostudio.site/bins): A quiet reminder for local bin collection days. In TestFlight.
+- [Dose](https://monostudio.site/dose): A simple daily medicine reminder. Coming soon.
+- [Grateful](https://monostudio.site/grateful): A private one-line gratitude journal. Coming soon.
+- [Bare Minimum](https://monostudio.site/bare-minimum): A daily list limited to three things. Coming soon.
+
+## Policies and contact
+
+- [About](https://monostudio.site/about): Why Mono Studio makes small apps for daily practice.
+- [Privacy](https://monostudio.site/privacy): How Mono Studio apps handle data.
+- Contact: hello@monostudio.site
+
+For the complete site copy in one file, read https://monostudio.site/llms-full.txt.

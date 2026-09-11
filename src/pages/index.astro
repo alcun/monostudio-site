@@ -1,0 +1,657 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Mono Studio - One thing, done well.">
+  <style>
+    .fade-in {
+      opacity: 0;
+      animation: breatheIn 0.8s ease-out forwards;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .ambient {
+      display: none;
+    }
+
+    .aura { position: absolute; border-radius: 50%; filter: blur(72px); }
+    .aura-one { width: 340px; height: 340px; left: -120px; top: 40px; background: var(--primary-soft); }
+    .aura-two { width: 430px; height: 430px; right: -160px; top: 360px; background: var(--accent); }
+    .aura-three { width: 360px; height: 360px; left: 30%; bottom: 100px; background: var(--primary-soft); opacity: 0.55; }
+
+    /* ---- Hero ---- */
+    .hero {
+      padding: 96px 0 0;
+      text-align: center;
+    }
+
+    .hero .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .hero .fade-in:nth-child(2) { animation-delay: 1.8s; }
+    .hero .fade-in:nth-child(3) { animation-delay: 2.2s; }
+
+    .enso-mark {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 48px;
+      position: relative;
+    }
+
+    .enso-mark svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* the brush paints here; the svg underneath is the no-JS mark and is hidden
+       the moment the script takes over */
+    .enso-mark canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    :global(:root[data-theme="dark"]) .enso-mark canvas { filter: invert(1) brightness(1.45); }
+    @media (prefers-color-scheme: dark) {
+      :global(:root:not([data-theme="light"])) .enso-mark canvas { filter: invert(1) brightness(1.45); }
+    }
+
+    @keyframes drawEnso {
+      from { stroke-dashoffset: 380; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    .enso-stroke {
+      stroke-dasharray: 380;
+      stroke-dashoffset: 380;
+      animation: drawEnso 2s cubic-bezier(0.25, 0.1, 0.25, 1) 0.3s forwards;
+    }
+
+    .wordmark {
+      font-family: "Noto Serif JP", serif;
+      font-weight: 200;
+      font-size: 38px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    .philosophy {
+      margin-top: 24px;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-soft);
+      line-height: 1.9;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ---- Divider ---- */
+    .breath {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 72px 0;
+      opacity: 0;
+      animation: breatheIn 0.6s ease-out 2.8s forwards;
+    }
+
+    .breath-line { width: 40px; height: 1px; background: var(--stone); }
+
+    .breath-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--stone);
+      margin: 0 16px;
+    }
+
+    /* ---- Apps ---- */
+    .apps-section { padding-bottom: 80px; }
+
+    .section-label {
+      font-family: "Noto Serif JP", serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: breatheIn 0.6s ease-out 3s forwards;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    .app-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: 238px;
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+      opacity: 0;
+      animation: breatheIn 0.5s ease-out forwards;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 rgba(45, 50, 72, 0.04), 0 18px 46px -28px var(--glass-shadow);
+      backdrop-filter: blur(22px) saturate(165%);
+      -webkit-backdrop-filter: blur(22px) saturate(165%);
+    }
+
+    .app-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(255,255,255,0.24), transparent 44%);
+    }
+
+    .app-card > * { position: relative; z-index: 1; }
+
+    .app-card:nth-child(1) { animation-delay: 3.1s; }
+    .app-card:nth-child(2) { animation-delay: 3.2s; }
+    .app-card:nth-child(3) { animation-delay: 3.3s; }
+    .app-card:nth-child(4) { animation-delay: 3.4s; }
+    .app-card:nth-child(5) { animation-delay: 3.5s; }
+    .app-card:nth-child(6) { animation-delay: 3.6s; }
+    .app-card:nth-child(7) { animation-delay: 3.7s; }
+
+    .app-card:hover {
+      background-color: color-mix(in srgb, var(--card) 84%, var(--primary-soft));
+      border-color: color-mix(in srgb, var(--primary) 16%, var(--border));
+      box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 46px -28px var(--glass-shadow);
+    }
+
+    .app-card:focus-visible {
+      outline: 2px solid var(--text-soft);
+      outline-offset: 3px;
+    }
+
+    .app-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .app-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.28);
+      border: 1px solid var(--glass-highlight);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      flex-shrink: 0;
+      /* Colour only. A 44px bordered tile scaled by a fraction lands its border
+         and its 12px radius on subpixels, and the 27px glyph inside goes soft
+         with it, so the hover read as a shimmer rather than a lift. */
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .app-icon svg {
+      width: 27px;
+      height: 27px;
+      display: block;
+    }
+
+    .app-card:hover .app-icon {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .app-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding-top: 4px;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-faint);
+      white-space: nowrap;
+    }
+
+    .app-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--stone);
+    }
+
+    .app-status.live { color: var(--text-soft); }
+    .app-status.live::before { background: var(--sage); }
+    .app-status.beta::before { background: var(--amber); }
+
+    .app-copy { margin-top: 22px; }
+
+    .app-name {
+      font-family: "Noto Serif JP", serif;
+      font-weight: 300;
+      font-size: 20px;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+    }
+
+    .app-tagline {
+      display: block;
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+
+    .app-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+      transition: color 0.2s ease;
+    }
+
+    .app-arrow {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s cubic-bezier(0.2, 0.75, 0.25, 1);
+    }
+
+    .app-card:hover .app-footer { color: var(--primary); }
+    .app-card:hover .app-arrow { transform: translateX(2px); }
+
+    :global(:root[data-theme="dark"]) .app-card::after { background: none; }
+    @media (prefers-color-scheme: dark) {
+      :global(:root:not([data-theme="light"])) .app-card::after { background: none; }
+    }
+
+    /* ---- Footer ---- */
+    .footer {
+      padding: 48px 0 64px;
+      text-align: center;
+      opacity: 0;
+      animation: breatheIn 0.6s ease-out 4.4s forwards;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover { color: var(--text-soft); }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.5px;
+    }
+
+    .footer-copy a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-copy a:hover { color: var(--text-soft); }
+
+    @media (max-width: 680px) {
+      .hero { padding: 80px 0 0; }
+      .wordmark { font-size: 30px; }
+      .philosophy { font-size: 15px; }
+      .breath { padding: 56px 0; }
+      .app-grid { grid-template-columns: 1fr; gap: 12px; }
+      .app-card {
+        padding: 24px 20px;
+        min-height: 220px;
+        border-radius: 14px;
+      }
+      .app-name { font-size: 20px; }
+      .container { padding: 0 24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .app-card,
+      .app-icon,
+      .app-footer,
+      .app-arrow { transition: none; }
+    }
+
+    :global(:root[data-home-return]) .fade-in,
+    :global(:root[data-home-return]) .breath,
+    :global(:root[data-home-return]) .section-label,
+    :global(:root[data-home-return]) .app-card,
+    :global(:root[data-home-return]) .footer {
+      opacity: 1;
+      animation: none;
+    }
+  </style>
+
+  <main>
+  <div class="ambient" aria-hidden="true">
+    <div class="aura aura-one"></div>
+    <div class="aura aura-two"></div>
+    <div class="aura aura-three"></div>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <div class="fade-in enso-mark">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            class="enso-stroke"
+            d="M 96 168 A 60 60 0 1 1 104 168"
+            stroke="currentColor"
+            stroke-width="8"
+            stroke-linecap="round"
+            fill="none"
+          ></path>
+        </svg>
+        <canvas id="ensoBrush" aria-hidden="true"></canvas>
+      </div>
+
+      <div class="fade-in">
+        <h1 class="wordmark">Mono Studio</h1>
+      </div>
+
+      <div class="fade-in">
+        <p class="philosophy">
+          One thing, done well.
+        </p>
+      </div>
+    </section>
+
+    <div class="breath">
+      <div class="breath-line"></div>
+      <div class="breath-dot"></div>
+      <div class="breath-line"></div>
+    </div>
+
+    <section class="apps-section">
+      <p class="section-label">Apps</p>
+      <div class="app-grid">
+        <a href="/keel" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 12 18 Q 18 19 24 22 T 36 30 T 50 45" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"></path>
+                <circle cx="50" cy="45" r="3.5" fill="currentColor"></circle>
+              </svg>
+            </div>
+            <span class="app-status live">On App Store</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Keel</span>
+            <span class="app-tagline">See the trend.</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+        <a href="/enso" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 27 48 A 18 18 0 1 1 33 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"></path>
+              </svg>
+            </div>
+            <span class="app-status beta">TestFlight</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Enso</span>
+            <span class="app-tagline">One stroke, every day.</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+        <a href="/fork" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(30 27)" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                  <line x1="-8" y1="-16" x2="-8" y2="5"></line>
+                  <line x1="8" y1="-16" x2="8" y2="5"></line>
+                  <path d="M -8 5 Q -8 11 -2.5 11 L 2.5 11 Q 8 11 8 5" fill="none"></path>
+                  <line x1="0" y1="11" x2="0" y2="22"></line>
+                </g>
+              </svg>
+            </div>
+            <span class="app-status live">On App Store</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Fork</span>
+            <span class="app-tagline">Stillness means in tune.</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+        <a href="/bins" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(30 30)" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <line x1="-11" y1="-15" x2="11" y2="-15"></line>
+                  <path d="M -10 -15 L -9 13 Q -9 17 -6 17 L 6 17 Q 9 17 9 13 L 10 -15"></path>
+                  <circle cx="-7" cy="19" r="1.4" fill="currentColor"></circle>
+                  <circle cx="7" cy="19" r="1.4" fill="currentColor"></circle>
+                </g>
+                <circle cx="30" cy="34" r="2" fill="currentColor"></circle>
+              </svg>
+            </div>
+            <span class="app-status beta">In review</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Bins</span>
+            <span class="app-tagline">Did you take the bins out?</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+        <a href="/dose" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(30 30)" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <rect x="-17" y="-7" width="34" height="14" rx="7"></rect>
+                  <line x1="0" y1="-7" x2="0" y2="7"></line>
+                </g>
+              </svg>
+            </div>
+            <span class="app-status">Coming soon</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Dose</span>
+            <span class="app-tagline">One a day. Did you?</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+        <a href="/grateful" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle>
+              </svg>
+            </div>
+            <span class="app-status">Coming soon</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Grateful</span>
+            <span class="app-tagline">One thing, every day.</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+        <a href="/bare-minimum" class="app-card">
+          <div class="app-card-top">
+            <div class="app-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="18" y1="22" x2="42" y2="22"></line>
+                <line x1="18" y1="30" x2="42" y2="30"></line>
+                <line x1="18" y1="38" x2="42" y2="38"></line>
+              </svg>
+            </div>
+            <span class="app-status">Coming soon</span>
+          </div>
+          <div class="app-copy">
+            <span class="app-name">Bare Minimum</span>
+            <span class="app-tagline">Three things. That's it.</span>
+          </div>
+          <div class="app-footer">
+            <span>View</span>
+            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <div class="breath">
+      <div class="breath-line"></div>
+      <div class="breath-dot"></div>
+      <div class="breath-line"></div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+        <a href="mailto:hello@monostudio.site">Contact</a>
+      </div>
+      <p class="footer-copy">© 2026 Mono Studio · <a href="https://alcun.dev" target="_blank" rel="noopener">alcun.dev</a></p>
+    </footer>
+  </div>
+  </main>
+</BaseLayout>
+
+<script>
+  // The mark, drawn with a brush instead of a stroked path. Geometry is read
+  // straight off the svg's own arc (M 96 168 A 60 60 0 1 1 104 168), so the logo
+  // keeps its shape and only gains a hand: the width comes from how fast the
+  // stroke is moving, and the ink runs out as it goes round.
+  import { EnsoBrush, arcLength, type Point } from "../lib/brush";
+
+  const canvas = document.getElementById("ensoBrush") as HTMLCanvasElement | null;
+  const svg = canvas?.parentElement?.querySelector("svg");
+  if (canvas) {
+    const SIZE = 120;
+    const INK = "#2A2A28";
+    const CY200 = 168 - Math.sqrt(60 * 60 - 16); // the arc's centre, from the path
+    const R = 60 / 200;
+    const CX = 100 / 200;
+    const CY = CY200 / 200;
+    const A0 = Math.atan2(168 - CY200, 96 - 100);
+    const A1 = Math.atan2(168 - CY200, 104 - 100);
+    // a full turn plus a little, so the dry end crosses back over the wet start
+    // and the ring actually closes. The old svg mark stopped 8 degrees short.
+    const SWEEP = A1 + Math.PI * 2 - A0 + 0.34;
+
+    // One breath: lands slow and loaded, opens through the middle, away at the
+    // end. That last acceleration is what thins the stroke and dries it out, and
+    // it is the whole character - a calmer version was tried and read as limp.
+    // ~1450ms, widths 22 down to 11 in 320-space.
+    function markStroke(): Point[] {
+      const pts: Point[] = [];
+      const n = 168;
+      const step = (SWEEP * R * 320) / n;
+      let t = 0;
+      for (let i = 0; i <= n; i++) {
+        const u = i / n;
+        // a hand does not draw a compass circle
+        const wob = Math.sin(u * 9.3) * 0.0022 + Math.sin(u * 23.7 + 1.1) * 0.0009;
+        const r = R + wob + u * 0.0015;
+        const ang = A0 + SWEEP * u;
+        const speed = 0.045 + 0.9 * Math.pow(Math.sin(u * Math.PI), 1.6) + Math.pow(u, 6) * 3;
+        t += step / speed;
+        pts.push([
+          Math.round((CX + Math.cos(ang) * r) * 1e4) / 1e4,
+          Math.round((CY + Math.sin(ang) * r) * 1e4) / 1e4,
+          Math.round(t),
+        ]);
+      }
+      return pts;
+    }
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    canvas.width = Math.round(SIZE * dpr);
+    canvas.height = Math.round(SIZE * dpr);
+    const ctx = canvas.getContext("2d")!;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (svg) (svg as SVGElement).style.display = "none";
+
+    const pts = markStroke();
+    const brush = new EnsoBrush(ctx, SIZE, INK);
+    const total = pts[pts.length - 1][2];
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduced) {
+      brush.finish(pts);
+    } else {
+      // fed, never re-rendered: the brush paints only what is newly drawn, and
+      // knowing the length up front lets it taper away at the end on its own
+      brush.begin(INK, arcLength(pts));
+      const start = performance.now() + 300; // same beat the css animation had
+      const step = () => {
+        const elapsed = performance.now() - start;
+        if (elapsed >= total) {
+          brush.seal(pts);
+          return;
+        }
+        if (elapsed > 0) {
+          let n = 2;
+          while (n < pts.length && pts[n][2] <= elapsed) n++;
+          brush.feed(pts.slice(0, n));
+        }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+  }
+</script>

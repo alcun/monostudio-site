@@ -1,0 +1,67 @@
+# Mono Studio
+
+Mono Studio makes focused iPhone apps for daily practice. Each app does one useful thing, takes seconds to use and keeps personal data on the device by default. The studio does not build attention traps, advertising systems or compulsory accounts.
+
+## Keel
+
+See the trend.
+
+A weight tracker without the noise. Enter one number a day and follow a quiet line showing the trend over time. No accounts, no cloud and no notifications nagging you to log. Nothing leaves your device. Keel is available on the App Store.
+
+Page: https://monostudio.site/keel
+
+## Fork
+
+Stillness means in tune.
+
+A chromatic tuner that listens to an instrument. The note settles and the screen becomes still when it is in tune. It supports chromatic and guitar use with reference pitch from 430 to 450 Hz. No ads, no accounts and nothing leaves the device. Fork is available on the App Store.
+
+Page: https://monostudio.site/fork
+
+## Enso
+
+One stroke, every day.
+
+A daily practice in a single gesture. Draw one circle a day and watch the year fill in. No accounts and no cloud, just the habit. Enso is in TestFlight.
+
+Page: https://monostudio.site/enso
+
+## Bins
+
+Bin day, sorted.
+
+Set a local collection schedule once and receive a quiet reminder the night before. Recycling, general and garden collections are kept together. Bins is in TestFlight.
+
+Page: https://monostudio.site/bins
+
+## Dose
+
+One a day. Did you?
+
+A simple reminder for one daily medicine. Confirm it once and the day goes quiet. Dose is coming soon.
+
+Page: https://monostudio.site/dose
+
+## Grateful
+
+One thing, every day.
+
+A gratitude journal reduced to one private line each day. Grateful is coming soon.
+
+Page: https://monostudio.site/grateful
+
+## Bare Minimum
+
+Three things. That's it.
+
+A daily to-do list that cannot grow beyond three items. Bare Minimum is coming soon.
+
+Page: https://monostudio.site/bare-minimum
+
+## Privacy
+
+Mono Studio apps store data locally by default. They do not use advertising or third-party tracking. Any future account or cloud-backup feature will be optional.
+
+Policy: https://monostudio.site/privacy
+
+Contact: hello@monostudio.site

@@ -1,0 +1,119 @@
+---
+import Lightbox from './Lightbox';
+
+interface ImageItem {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Props { images: ImageItem[]; }
+const { images } = Astro.props;
+---
+
+<section class="shot-gallery" aria-label="App screenshots">
+  <div class="shot-strip" data-shot-strip>
+    {images.map((image) => (
+      <button
+        type="button"
+        class="shot"
+        data-shot
+        data-src={image.src}
+        data-alt={image.alt}
+        data-w={image.width}
+        data-h={image.height}
+        aria-label={`View larger: ${image.alt}`}
+      >
+        <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+      </button>
+    ))}
+  </div>
+  <Lightbox client:idle />
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-shot-strip]').forEach((strip) => {
+    const shots = [...strip.querySelectorAll<HTMLElement>('[data-shot]')];
+    const reset = () => shots.forEach((shot) => shot.style.setProperty('--focus', '0'));
+
+    strip.addEventListener('pointermove', (event) => {
+      if (event.pointerType === 'touch') return;
+      shots.forEach((shot) => {
+        const rect = shot.getBoundingClientRect();
+        const centre = rect.left + rect.width / 2;
+        const reach = Math.max(rect.width * 2.2, 260);
+        const focus = Math.max(0, 1 - Math.abs(event.clientX - centre) / reach);
+        shot.style.setProperty('--focus', focus.toFixed(3));
+      });
+    });
+    strip.addEventListener('pointerleave', reset);
+
+    shots.forEach((shot) => {
+      let warmed = false;
+      shot.addEventListener('pointerenter', () => {
+        if (!warmed && shot.dataset.src) {
+          warmed = true;
+          new Image().src = shot.dataset.src;
+        }
+      });
+      shot.addEventListener('click', () => {
+        const image = shot.querySelector('img');
+        window.dispatchEvent(new CustomEvent('lightbox:open', { detail: {
+          src: shot.dataset.src ?? '',
+          alt: shot.dataset.alt ?? '',
+          thumb: image?.currentSrc || image?.src || '',
+          w: Number(shot.dataset.w),
+          h: Number(shot.dataset.h),
+        }}));
+      });
+    });
+  });
+</script>
+
+<style>
+  .shot-gallery { margin: 0; }
+  .shot-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: center;
+    gap: 12px;
+    min-height: 330px;
+    padding: 18px 4px 22px;
+    overflow: visible;
+  }
+  .shot {
+    --focus: 0;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 18px;
+    background: none;
+    cursor: zoom-in;
+    overflow: hidden;
+    z-index: 1;
+    transform: translateY(calc(var(--focus) * -5px)) scale(calc(1 + var(--focus) * 0.025));
+    box-shadow: 0 calc(10px + var(--focus) * 6px) calc(28px + var(--focus) * 10px) -22px var(--glass-shadow);
+    transition: transform 0.24s cubic-bezier(0.2, 0.75, 0.25, 1), box-shadow 0.24s ease;
+  }
+  .shot:hover { z-index: 2; }
+  .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: inherit; }
+
+  @media (max-width: 620px), (hover: none) {
+    .shot-strip { display: flex; min-height: 0; overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: 4px; scrollbar-width: none; }
+    .shot-strip::-webkit-scrollbar { display: none; }
+    .shot { flex: 0 0 42%; transform: none; scroll-snap-align: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { .shot { transition: none; transform: none; } }
+</style>
+
+<style is:global>
+  .lightbox { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: clamp(1rem, 4vw, 3rem); background: rgba(18, 18, 20, 0.84); backdrop-filter: blur(8px); cursor: zoom-out; animation: lb-in 0.25s ease; }
+  .lightbox.closing { animation: lb-out 0.22s ease forwards; }
+  .lightbox-img { max-width: min(1200px, 82vw); max-height: 82vh; width: auto; height: auto; object-fit: contain; border-radius: 14px; box-shadow: 0 24px 70px rgba(0,0,0,0.5); cursor: default; animation: lb-zoom-in 0.3s cubic-bezier(0.2,0.8,0.25,1); }
+  .lightbox-close { position: fixed; top: 16px; right: 16px; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgba(255,255,255,0.15); border-radius: 50%; background: rgba(0,0,0,0.38); color: white; cursor: pointer; }
+  @keyframes lb-in { from { opacity: 0; } }
+  @keyframes lb-out { to { opacity: 0; } }
+  @keyframes lb-zoom-in { from { opacity: 0; transform: scale(0.94); } }
+</style>

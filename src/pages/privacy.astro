@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy - Mono Studio" description="Privacy policy for Mono Studio apps.">
+  <style>
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 80px 32px 100px;
+      opacity: 0;
+      animation: breatheIn 0.8s ease-out 0.2s forwards;
+    }
+
+    .back {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      margin-bottom: 56px;
+      transition: color 0.3s ease;
+    }
+
+    .back:hover { color: var(--text-soft); }
+    .back span { margin-right: 6px; font-size: 14px; }
+
+    h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 200;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .effective {
+      font-size: 12px;
+      color: var(--text-faint);
+      letter-spacing: 0.5px;
+      margin-bottom: 48px;
+    }
+
+    .intro {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-soft);
+      line-height: 1.9;
+      margin-bottom: 48px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 0;
+    }
+
+    .divider-line { width: 24px; height: 1px; background: var(--border); }
+
+    h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 17px;
+      letter-spacing: 0.03em;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-soft);
+      line-height: 1.85;
+      margin-bottom: 4px;
+    }
+
+    a {
+      color: var(--text-soft);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+
+    a:hover { border-color: var(--text-soft); }
+
+    .footer {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 520px) {
+      .container { padding: 48px 24px 80px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+
+  <main class="container">
+    <a href="/" class="back"><span>←</span> Mono Studio</a>
+
+    <h1>Privacy</h1>
+    <p class="effective">Effective 25 March 2026</p>
+
+    <p class="intro">
+      Mono Studio builds simple, focused apps for daily practice.
+      Your privacy is fundamental to that simplicity - we collect
+      as little data as possible and keep everything on your device.
+    </p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Data we collect</h2>
+    <p>By default, our apps store your data locally on your device. The apps use no analytics, no tracking, no third-party SDKs and no advertising.</p>
+
+    <p>This website is the one exception, and only just: it counts page views using LoggerLizard, which we build ourselves rather than buy from anyone. No cookies, no advertising, no profile of you, and nothing shared with a third party. The apps remain entirely silent.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>On-device storage</h2>
+    <p>Everything you enter - weight entries, drawings, notes, or any other content - is stored locally on your device by default.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Optional accounts &amp; cloud backup</h2>
+    <p>Some apps may offer optional account creation and cloud backup so you can sync or restore your data across devices. This is always opt-in - if you choose not to create an account, your data stays on your device and we store nothing remotely. If you do opt in, we store only the data necessary to provide the backup service. You can delete your account and all associated data at any time.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Purchases</h2>
+    <p>If you purchase the Patina bundle, the transaction is handled entirely by Apple through the App Store. We do not receive or store any payment information.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Notifications</h2>
+    <p>Some apps may request permission to send local notifications as reminders. These are scheduled on-device and do not involve any external servers.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Children</h2>
+    <p>Our apps do not knowingly collect any information from children under 13. Since we collect no data at all, there is nothing to collect.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Changes</h2>
+    <p>If this policy changes, we will update this page with a new effective date. Given our approach - collecting nothing - changes are unlikely.</p>
+
+    <div class="divider"><div class="divider-line"></div></div>
+    <h2>Contact</h2>
+    <p>Questions? Reach us at <a href="mailto:hello@monostudio.site">hello@monostudio.site</a></p>
+
+    <footer class="footer">
+      <p class="footer-copy">© 2026 Mono Studio</p>
+    </footer>
+  </main>
+</BaseLayout>

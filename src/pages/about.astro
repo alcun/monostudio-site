@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About - Mono Studio"
+  description="Mono Studio makes focused iPhone apps for daily practice. One useful thing, without accounts, advertising or unnecessary noise."
+>
+  <style>
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 80px 32px 100px;
+      opacity: 0;
+      animation: breatheIn 0.8s ease-out 0.2s forwards;
+    }
+
+    .back {
+      display: inline-block;
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      margin-bottom: 56px;
+      transition: color 0.3s ease;
+    }
+
+    .back:hover { color: var(--text-soft); }
+    .back span { margin-right: 6px; font-size: 14px; }
+
+    h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 200;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 18px;
+      letter-spacing: 0.03em;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-soft);
+      line-height: 1.9;
+      margin-bottom: 18px;
+    }
+
+    a:not(.back) {
+      color: inherit;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--border);
+      transition: text-decoration-color 0.3s ease;
+    }
+
+    a:not(.back):hover { text-decoration-color: var(--text-soft); }
+
+    .footer {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 520px) {
+      .container { padding: 48px 24px 80px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+
+  <main class="container">
+    <a href="/" class="back"><span>←</span> Mono Studio</a>
+
+    <h1>About</h1>
+    <h2>Small apps for daily practice</h2>
+    <p>
+      Mono Studio makes focused iPhone apps that do one useful thing without accounts, advertising or unnecessary noise.
+      <a href="/keel">Keel</a> follows a weight trend, <a href="/fork">Fork</a> tunes an instrument,
+      <a href="/enso">Enso</a> keeps a daily drawing practice and <a href="/bins">Bins</a> remembers collection day.
+    </p>
+    <p>
+      Each app is designed to take seconds, keep its data on the device and become more useful through repetition rather than attention.
+    </p>
+
+    <footer class="footer">
+      <p class="footer-copy">© 2026 Mono Studio</p>
+    </footer>
+  </main>
+</BaseLayout>
