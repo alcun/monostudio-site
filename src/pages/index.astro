@@ -1,5 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+type Status = 'live' | 'beta' | 'review' | 'soon';
+const action: Record<Status, string> = { live: 'View', beta: 'Beta', review: 'In review', soon: 'Soon' };
+const statusText: Record<Status, string> = { live: 'on the App Store', beta: 'in TestFlight', review: 'in App Review', soon: 'coming soon' };
+
+// Grouped by where each app is, then in the order Al set.
+const apps: { slug: string; name: string; tagline: string; status: Status; icon?: string; glyph?: string }[] = [
+  { slug: 'fork', name: 'Fork', tagline: 'Guitar, bass and ukulele', status: 'live', icon: '/icons/fork.png' },
+  { slug: 'keel', name: 'Keel', tagline: 'See the trend.', status: 'live', icon: '/icons/keel.png' },
+  { slug: 'bins', name: 'Bins', tagline: 'Did you take the bins out?', status: 'review', icon: '/icons/bins.png' },
+  { slug: 'lune', name: 'Lune', tagline: 'Moon phases and calendar', status: 'beta', icon: '/icons/lune.png' },
+  { slug: 'enso', name: 'Enso', tagline: 'One stroke, every day.', status: 'beta', icon: '/icons/enso.png' },
+  { slug: 'tide', name: 'Tide', tagline: 'Tide times for your coast', status: 'soon', icon: '/icons/tide.png' },
+  { slug: 'dose', name: 'Dose', tagline: 'One a day. Did you?', status: 'soon', icon: '/icons/dose.png' },
+  { slug: 'grateful', name: 'Grateful', tagline: 'One thing, every day.', status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"> <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle> </svg>' },
+  { slug: 'bare-minimum', name: 'Bare Minimum', tagline: "Three things. That's it.", status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"> <line x1="18" y1="22" x2="42" y2="22"></line> <line x1="18" y1="30" x2="42" y2="30"></line> <line x1="18" y1="38" x2="42" y2="38"></line> </svg>' },
+];
 ---
 
 <BaseLayout title="Mono Studio - One thing, done well.">
@@ -128,170 +145,118 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       animation: breatheIn 0.6s ease-out 3s forwards;
     }
 
-    .app-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
-    }
-
-    .app-card {
-      position: relative;
+    /* App Store-style list: one grouped panel, real icons, a capsule that says
+       where the app is. Icons keep their own colours in dark mode, as on iOS. */
+    .apps-panel {
+      --native: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Karla, system-ui, sans-serif;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      min-height: 238px;
-      transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-      opacity: 0;
-      animation: breatheIn 0.5s ease-out forwards;
-      cursor: pointer;
-      text-decoration: none;
-      box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 rgba(45, 50, 72, 0.04), 0 18px 46px -28px var(--glass-shadow);
+      border-radius: 26px;
+      padding: 6px 28px;
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 18px 46px -28px var(--glass-shadow);
       backdrop-filter: blur(22px) saturate(165%);
       -webkit-backdrop-filter: blur(22px) saturate(165%);
+      opacity: 0;
+      animation: breatheIn 0.6s ease-out 3.1s forwards;
     }
 
-    .app-card::after {
+    .app-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 44px;
+    }
+
+    .app-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      color: inherit;
+      text-decoration: none;
+      border-radius: 18px;
+    }
+
+    /* iOS separators start under the text, not the icon */
+    .app-list li:nth-child(n + 3) .app-row::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 78px;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .app-row:focus-visible { outline: 2px solid var(--text-soft); outline-offset: 2px; }
+
+    .app-icon {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border-radius: 22.5%;
+      overflow: hidden;
+      background: #f4ede0;
+      color: #2a2a28;
+      display: grid;
+      place-items: center;
+    }
+
+    .app-icon::after {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      pointer-events: none;
-      background: linear-gradient(180deg, rgba(255,255,255,0.24), transparent 44%);
+      box-shadow: inset 0 0 0 1px rgba(42, 42, 40, 0.1);
     }
 
-    .app-card > * { position: relative; z-index: 1; }
-
-    .app-card:nth-child(1) { animation-delay: 3.1s; }
-    .app-card:nth-child(2) { animation-delay: 3.2s; }
-    .app-card:nth-child(3) { animation-delay: 3.3s; }
-    .app-card:nth-child(4) { animation-delay: 3.4s; }
-    .app-card:nth-child(5) { animation-delay: 3.5s; }
-    .app-card:nth-child(6) { animation-delay: 3.6s; }
-    .app-card:nth-child(7) { animation-delay: 3.7s; }
-
-    .app-card:hover {
-      background-color: color-mix(in srgb, var(--card) 84%, var(--primary-soft));
-      border-color: color-mix(in srgb, var(--primary) 16%, var(--border));
-      box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 18px 46px -28px var(--glass-shadow);
-    }
-
-    .app-card:focus-visible {
-      outline: 2px solid var(--text-soft);
-      outline-offset: 3px;
-    }
-
-    .app-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .app-icon {
-      width: 44px;
-      height: 44px;
-      background: rgba(255, 255, 255, 0.28);
-      border: 1px solid var(--glass-highlight);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-      flex-shrink: 0;
-      /* Colour only. A 44px bordered tile scaled by a fraction lands its border
-         and its 12px radius on subpixels, and the 27px glyph inside goes soft
-         with it, so the hover read as a shimmer rather than a lift. */
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .app-icon svg {
-      width: 27px;
-      height: 27px;
-      display: block;
-    }
-
-    .app-card:hover .app-icon {
-      background: var(--primary-soft);
-      color: var(--primary);
-    }
-
-    .app-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding-top: 4px;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--text-faint);
-      white-space: nowrap;
-    }
-
-    .app-status::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--stone);
-    }
-
-    .app-status.live { color: var(--text-soft); }
-    .app-status.live::before { background: var(--sage); }
-    .app-status.beta::before { background: var(--amber); }
-
-    .app-copy { margin-top: 22px; }
+    .app-icon img { width: 100%; height: 100%; display: block; }
+    .app-icon :global(svg) { width: 60%; height: 60%; display: block; }
 
     .app-name {
-      font-family: "Noto Serif JP", serif;
-      font-weight: 300;
-      font-size: 20px;
+      display: block;
+      font-family: var(--native);
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
       color: var(--text);
-      letter-spacing: 0.01em;
-      line-height: 1.1;
     }
 
     .app-tagline {
       display: block;
-      margin-top: 6px;
-      font-size: 14px;
-      font-weight: 300;
+      margin-top: 2px;
+      font-family: var(--native);
+      font-size: 13px;
+      line-height: 1.35;
       color: var(--text-soft);
-      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .app-footer {
-      margin-top: auto;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
+    .app-action {
+      min-width: 70px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-family: var(--native);
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
       color: var(--text-soft);
-      transition: color 0.2s ease;
+      background-color: color-mix(in srgb, var(--text) 7%, transparent);
+      transition: background-color 0.2s ease;
     }
 
-    .app-arrow {
-      width: 16px;
-      height: 16px;
-      transition: transform 0.2s cubic-bezier(0.2, 0.75, 0.25, 1);
-    }
-
-    .app-card:hover .app-footer { color: var(--primary); }
-    .app-card:hover .app-arrow { transform: translateX(2px); }
-
-    :global(:root[data-theme="dark"]) .app-card::after { background: none; }
-    @media (prefers-color-scheme: dark) {
-      :global(:root:not([data-theme="light"])) .app-card::after { background: none; }
-    }
+    .app-action.live { color: var(--sage-deep); background-color: var(--sage-soft); }
+    .app-action.beta { color: color-mix(in srgb, var(--amber) 62%, var(--text)); background-color: color-mix(in srgb, var(--amber) 16%, transparent); }
+    .app-row:hover .app-action { background-color: color-mix(in srgb, currentColor 20%, transparent); }
 
     /* ---- Footer ---- */
     .footer {
@@ -337,27 +302,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       .wordmark { font-size: 30px; }
       .philosophy { font-size: 15px; }
       .breath { padding: 56px 0; }
-      .app-grid { grid-template-columns: 1fr; gap: 12px; }
-      .app-card {
-        padding: 24px 20px;
-        min-height: 220px;
-        border-radius: 14px;
+      .apps-panel { padding: 4px 18px; border-radius: 22px; }
+      .app-list { grid-template-columns: 1fr; }
+      .app-row { grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; padding: 12px 0; }
+      .app-icon { width: 56px; height: 56px; }
+      .app-tagline { white-space: normal; }
+      .app-action { min-width: 0; padding: 7px 14px; }
+      .app-list li:nth-child(2) .app-row::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 68px;
+        right: 0;
+        height: 1px;
+        background: var(--border);
       }
-      .app-name { font-size: 20px; }
+      .app-list li:nth-child(n + 3) .app-row::before { left: 68px; }
       .container { padding: 0 24px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .app-card,
-      .app-icon,
-      .app-footer,
-      .app-arrow { transition: none; }
+      .app-action { transition: none; }
     }
 
     :global(:root[data-home-return]) .fade-in,
     :global(:root[data-home-return]) .breath,
     :global(:root[data-home-return]) .section-label,
-    :global(:root[data-home-return]) .app-card,
+    :global(:root[data-home-return]) .apps-panel,
     :global(:root[data-home-return]) .footer {
       opacity: 1;
       animation: none;
@@ -406,150 +377,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <section class="apps-section">
       <p class="section-label">Apps</p>
-      <div class="app-grid">
-        <a href="/fork" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(30 27)" stroke="currentColor" stroke-width="3" stroke-linecap="round">
-                  <line x1="-8" y1="-16" x2="-8" y2="5"></line>
-                  <line x1="8" y1="-16" x2="8" y2="5"></line>
-                  <path d="M -8 5 Q -8 11 -2.5 11 L 2.5 11 Q 8 11 8 5" fill="none"></path>
-                  <line x1="0" y1="11" x2="0" y2="22"></line>
-                </g>
-              </svg>
-            </div>
-            <span class="app-status live">On App Store</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Fork</span>
-            <span class="app-tagline">Stillness means in tune.</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
-        <a href="/keel" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 12 18 Q 18 19 24 22 T 36 30 T 50 45" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"></path>
-                <circle cx="50" cy="45" r="3.5" fill="currentColor"></circle>
-              </svg>
-            </div>
-            <span class="app-status live">On App Store</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Keel</span>
-            <span class="app-tagline">See the trend.</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
-        <a href="/bins" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(30 30)" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                  <line x1="-11" y1="-15" x2="11" y2="-15"></line>
-                  <path d="M -10 -15 L -9 13 Q -9 17 -6 17 L 6 17 Q 9 17 9 13 L 10 -15"></path>
-                  <circle cx="-7" cy="19" r="1.4" fill="currentColor"></circle>
-                  <circle cx="7" cy="19" r="1.4" fill="currentColor"></circle>
-                </g>
-                <circle cx="30" cy="34" r="2" fill="currentColor"></circle>
-              </svg>
-            </div>
-            <span class="app-status beta">In review</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Bins</span>
-            <span class="app-tagline">Did you take the bins out?</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
-        <a href="/enso" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <path d="M 27 48 A 18 18 0 1 1 33 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"></path>
-              </svg>
-            </div>
-            <span class="app-status beta">TestFlight</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Enso</span>
-            <span class="app-tagline">One stroke, every day.</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
-        <a href="/dose" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(30 30)" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                  <rect x="-17" y="-7" width="34" height="14" rx="7"></rect>
-                  <line x1="0" y1="-7" x2="0" y2="7"></line>
-                </g>
-              </svg>
-            </div>
-            <span class="app-status">Coming soon</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Dose</span>
-            <span class="app-tagline">One a day. Did you?</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
-        <a href="/grateful" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle>
-              </svg>
-            </div>
-            <span class="app-status">Coming soon</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Grateful</span>
-            <span class="app-tagline">One thing, every day.</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
-        <a href="/bare-minimum" class="app-card">
-          <div class="app-card-top">
-            <div class="app-icon">
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                <line x1="18" y1="22" x2="42" y2="22"></line>
-                <line x1="18" y1="30" x2="42" y2="30"></line>
-                <line x1="18" y1="38" x2="42" y2="38"></line>
-              </svg>
-            </div>
-            <span class="app-status">Coming soon</span>
-          </div>
-          <div class="app-copy">
-            <span class="app-name">Bare Minimum</span>
-            <span class="app-tagline">Three things. That's it.</span>
-          </div>
-          <div class="app-footer">
-            <span>View</span>
-            <svg class="app-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </div>
-        </a>
+      <div class="apps-panel">
+        <ul class="app-list">
+          {apps.map((app) => (
+            <li>
+              <a href={`/${app.slug}`} class="app-row" aria-label={`${app.name}, ${statusText[app.status]}`}>
+                <span class="app-icon" aria-hidden="true">
+                  {app.icon ? <img src={app.icon} alt="" width="64" height="64" /> : <Fragment set:html={app.glyph} />}
+                </span>
+                <span>
+                  <span class="app-name">{app.name}</span>
+                  <span class="app-tagline">{app.tagline}</span>
+                </span>
+                <span class={`app-action ${app.status}`} aria-hidden="true">{action[app.status]}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 

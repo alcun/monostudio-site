@@ -14,9 +14,17 @@ Page: https://monostudio.site/keel
 
 Stillness means in tune.
 
-A chromatic tuner that listens to an instrument. The note settles and the screen becomes still when it is in tune. It supports chromatic and guitar use with reference pitch from 430 to 450 Hz. No ads, no accounts and nothing leaves the device. Fork is available on the App Store.
+A tuner that listens to an instrument. The note settles and the screen becomes still when it is in tune. It detects guitar, bass and ukulele strings, has a chromatic mode for any note and sets the reference pitch from 430 to 450 Hz. No ads, no accounts and nothing leaves the device. Fork is available on the App Store.
 
 Page: https://monostudio.site/fork
+
+## Lune
+
+Moon phases and calendar.
+
+Explore the Moon in 3D, turn it to see the far side and pull back to see the Earth and Moon together. Drag through time to watch the phase change and check rise and set times for chosen places. A calendar keeps the Moon from each day the app is opened. Lune is in TestFlight.
+
+Page: https://monostudio.site/lune
 
 ## Enso
 
@@ -30,9 +38,17 @@ Page: https://monostudio.site/enso
 
 Bin day, sorted.
 
-Set a local collection schedule once and receive a quiet reminder the night before. Recycling, general and garden collections are kept together. Bins is in TestFlight.
+Set a local collection schedule once and receive a quiet reminder the night before. Recycling, general and garden collections are kept together. Bins is in App Review.
 
 Page: https://monostudio.site/bins
+
+## Tide
+
+Tide times for your coast.
+
+High and low water for a stretch of coast, with the water rising and falling on screen and a globe for picking a place. Tide is coming soon.
+
+Page: https://monostudio.site/tide
 
 ## Dose
 

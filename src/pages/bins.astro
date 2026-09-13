@@ -4,20 +4,12 @@ import ScreenshotGallery from '../components/ScreenshotGallery.astro';
 ---
 
 <AppLayout
+  icon="/icons/bins.png"
   name="Bins"
   tagline="Did you take the bins out?"
   description="Bins answers that, and the harder question underneath it: which one goes out this week. Set each bin up once - name, colour, collection day, weekly or fortnightly - and it works out every collection from there. Reminders land the night before, and a fortnightly bin stays quiet on its off week. No account, no council lookup, no postcode."
   status="in review"
 >
-  <svg slot="icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(30 30)" stroke="#2A2A28" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-      <line x1="-11" y1="-15" x2="11" y2="-15"></line>
-      <path d="M -10 -15 L -9 13 Q -9 17 -6 17 L 6 17 Q 9 17 9 13 L 10 -15"></path>
-      <circle cx="-7" cy="19" r="1.4" fill="#2A2A28"></circle>
-      <circle cx="7" cy="19" r="1.4" fill="#2A2A28"></circle>
-    </g>
-    <circle cx="30" cy="34" r="2" fill="#2A2A28"></circle>
-  </svg>
 
   <ScreenshotGallery images={[
     { src: '/bins/1-today.png', alt: 'Bins - collection day, with yes done', width: 1320, height: 2868 },

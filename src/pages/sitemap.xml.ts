@@ -4,6 +4,8 @@ const routes = [
   'fork',
   'enso',
   'bins',
+  'lune',
+  'tide',
   'dose',
   'grateful',
   'bare-minimum',

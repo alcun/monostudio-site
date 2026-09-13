@@ -1,0 +1,20 @@
+---
+import AppLayout from '../layouts/AppLayout.astro';
+import ScreenshotGallery from '../components/ScreenshotGallery.astro';
+---
+
+<AppLayout
+  name="Lune"
+  tagline="Moon phases and calendar."
+  description="Explore the Moon in 3D. Turn it to see the far side, then pull back to see the Earth and Moon together. Drag through time to watch the phase change, and check rise and set times for the places you care about. A small calendar keeps the Moon from each day you open the app."
+  status="on testflight"
+  icon="/icons/lune.png"
+>
+  <ScreenshotGallery images={[
+    { src: '/lune/1-moon.jpg', alt: 'Lune - the Moon tonight', width: 1320, height: 2868 },
+    { src: '/lune/2-earth-moon.jpg', alt: 'Lune - the Earth and Moon together', width: 1320, height: 2868 },
+    { src: '/lune/3-time.jpg', alt: 'Lune - scrubbing through time', width: 1320, height: 2868 },
+    { src: '/lune/4-places.jpg', alt: 'Lune - the Moon across three places', width: 1320, height: 2868 },
+    { src: '/lune/5-calendar.jpg', alt: 'Lune - the moon calendar', width: 1320, height: 2868 },
+  ]} />
+</AppLayout>
