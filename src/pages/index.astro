@@ -5,7 +5,8 @@ type Status = 'live' | 'beta' | 'review' | 'soon';
 const action: Record<Status, string> = { live: 'View', beta: 'Beta', review: 'In review', soon: 'Soon' };
 const statusText: Record<Status, string> = { live: 'on the App Store', beta: 'in TestFlight', review: 'in App Review', soon: 'coming soon' };
 
-// Grouped by where each app is, then in the order Al set.
+// Grouped by where each app is, then in the order Al set. Live apps use the
+// artwork from their App Store listing; the rest use the project's icon.png.
 const apps: { slug: string; name: string; tagline: string; status: Status; icon?: string; glyph?: string }[] = [
   { slug: 'fork', name: 'Fork', tagline: 'Guitar, bass and ukulele', status: 'live', icon: '/icons/fork.png' },
   { slug: 'keel', name: 'Keel', tagline: 'See the trend.', status: 'live', icon: '/icons/keel.png' },
@@ -145,65 +146,62 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
       animation: breatheIn 0.6s ease-out 3s forwards;
     }
 
-    /* App Store-style list: one grouped panel, real icons, a capsule that says
-       where the app is. Icons keep their own colours in dark mode, as on iOS. */
-    .apps-panel {
+    /* App Store-style cards: one per app, real icons, a capsule that says where
+       the app is. Icons keep their own colours in dark mode, as on iOS. */
+    .app-grid {
       --native: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Karla, system-ui, sans-serif;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      padding: 6px 28px;
-      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 18px 46px -28px var(--glass-shadow);
-      backdrop-filter: blur(22px) saturate(165%);
-      -webkit-backdrop-filter: blur(22px) saturate(165%);
-      opacity: 0;
-      animation: breatheIn 0.6s ease-out 3.1s forwards;
-    }
-
-    .app-list {
       list-style: none;
       padding: 0;
       margin: 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: 44px;
+      gap: 16px;
+      opacity: 0;
+      animation: breatheIn 0.6s ease-out 3.1s forwards;
     }
 
-    .app-row {
+    .app-card {
       position: relative;
       display: grid;
-      grid-template-columns: 64px minmax(0, 1fr) auto;
+      grid-template-columns: 76px minmax(0, 1fr) auto;
       align-items: center;
-      gap: 14px;
-      padding: 14px 0;
+      gap: 16px;
+      padding: 16px 18px 16px 16px;
       color: inherit;
       text-decoration: none;
-      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 1px 2px rgba(42, 42, 40, 0.04), 0 18px 40px -30px var(--glass-shadow);
+      backdrop-filter: blur(22px) saturate(165%);
+      -webkit-backdrop-filter: blur(22px) saturate(165%);
+      transition:
+        transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+        background-color 0.3s ease;
     }
 
-    /* iOS separators start under the text, not the icon */
-    .app-list li:nth-child(n + 3) .app-row::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 78px;
-      right: 0;
-      height: 1px;
-      background: var(--border);
+    .app-card:hover {
+      transform: translateY(-2px);
+      background-color: color-mix(in srgb, var(--card) 80%, var(--glass-highlight));
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 1px 2px rgba(42, 42, 40, 0.05), 0 26px 50px -30px var(--glass-shadow);
     }
 
-    .app-row:focus-visible { outline: 2px solid var(--text-soft); outline-offset: 2px; }
+    /* the iOS press: settle in, quickly */
+    .app-card:active { transform: scale(0.985); transition-duration: 0.12s; }
+    .app-card:focus-visible { outline: 2px solid var(--text-soft); outline-offset: 3px; }
 
     .app-icon {
       position: relative;
-      width: 64px;
-      height: 64px;
+      width: 76px;
+      height: 76px;
       border-radius: 22.5%;
       overflow: hidden;
       background: #f4ede0;
       color: #2a2a28;
       display: grid;
       place-items: center;
+      box-shadow: 0 1px 1px rgba(42, 42, 40, 0.06), 0 8px 18px -12px rgba(42, 42, 40, 0.45);
     }
 
     .app-icon::after {
@@ -211,7 +209,7 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      box-shadow: inset 0 0 0 1px rgba(42, 42, 40, 0.1);
+      box-shadow: inset 0 0 0 1px rgba(42, 42, 40, 0.08);
     }
 
     .app-icon img { width: 100%; height: 100%; display: block; }
@@ -221,42 +219,39 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
       display: block;
       font-family: var(--native);
       font-weight: 600;
-      font-size: 16px;
+      font-size: 17px;
       line-height: 1.25;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.012em;
       color: var(--text);
     }
 
     .app-tagline {
       display: block;
-      margin-top: 2px;
+      margin-top: 3px;
       font-family: var(--native);
-      font-size: 13px;
+      font-size: 14px;
       line-height: 1.35;
       color: var(--text-soft);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .app-action {
-      min-width: 70px;
-      padding: 7px 12px;
+      min-width: 76px;
+      padding: 8px 14px;
       border-radius: 999px;
       font-family: var(--native);
-      font-weight: 700;
-      font-size: 13px;
+      font-weight: 600;
+      font-size: 14px;
       line-height: 1;
       text-align: center;
       white-space: nowrap;
       color: var(--text-soft);
       background-color: color-mix(in srgb, var(--text) 7%, transparent);
-      transition: background-color 0.2s ease;
+      transition: background-color 0.3s ease;
     }
 
     .app-action.live { color: var(--sage-deep); background-color: var(--sage-soft); }
     .app-action.beta { color: color-mix(in srgb, var(--amber) 62%, var(--text)); background-color: color-mix(in srgb, var(--amber) 16%, transparent); }
-    .app-row:hover .app-action { background-color: color-mix(in srgb, currentColor 20%, transparent); }
+    .app-card:hover .app-action { background-color: color-mix(in srgb, currentColor 20%, transparent); }
 
     /* ---- Footer ---- */
     .footer {
@@ -302,33 +297,24 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
       .wordmark { font-size: 30px; }
       .philosophy { font-size: 15px; }
       .breath { padding: 56px 0; }
-      .apps-panel { padding: 4px 18px; border-radius: 22px; }
-      .app-list { grid-template-columns: 1fr; }
-      .app-row { grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; padding: 12px 0; }
-      .app-icon { width: 56px; height: 56px; }
-      .app-tagline { white-space: normal; }
-      .app-action { min-width: 0; padding: 7px 14px; }
-      .app-list li:nth-child(2) .app-row::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 68px;
-        right: 0;
-        height: 1px;
-        background: var(--border);
-      }
-      .app-list li:nth-child(n + 3) .app-row::before { left: 68px; }
+      .app-grid { grid-template-columns: 1fr; gap: 12px; }
+      .app-card { grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; padding: 14px 16px 14px 14px; border-radius: 22px; }
+      .app-icon { width: 64px; height: 64px; }
+      .app-action { min-width: 0; padding: 8px 14px; }
       .container { padding: 0 24px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .app-card,
       .app-action { transition: none; }
+      .app-card:hover,
+      .app-card:active { transform: none; }
     }
 
     :global(:root[data-home-return]) .fade-in,
     :global(:root[data-home-return]) .breath,
     :global(:root[data-home-return]) .section-label,
-    :global(:root[data-home-return]) .apps-panel,
+    :global(:root[data-home-return]) .app-grid,
     :global(:root[data-home-return]) .footer {
       opacity: 1;
       animation: none;
@@ -377,24 +363,22 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
 
     <section class="apps-section">
       <p class="section-label">Apps</p>
-      <div class="apps-panel">
-        <ul class="app-list">
-          {apps.map((app) => (
-            <li>
-              <a href={`/${app.slug}`} class="app-row" aria-label={`${app.name}, ${statusText[app.status]}`}>
-                <span class="app-icon" aria-hidden="true">
-                  {app.icon ? <img src={app.icon} alt="" width="64" height="64" /> : <Fragment set:html={app.glyph} />}
-                </span>
-                <span>
-                  <span class="app-name">{app.name}</span>
-                  <span class="app-tagline">{app.tagline}</span>
-                </span>
-                <span class={`app-action ${app.status}`} aria-hidden="true">{action[app.status]}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul class="app-grid">
+        {apps.map((app) => (
+          <li>
+            <a href={`/${app.slug}`} class="app-card" aria-label={`${app.name}, ${statusText[app.status]}`}>
+              <span class="app-icon" aria-hidden="true">
+                {app.icon ? <img src={app.icon} alt="" width="76" height="76" /> : <Fragment set:html={app.glyph} />}
+              </span>
+              <span>
+                <span class="app-name">{app.name}</span>
+                <span class="app-tagline">{app.tagline}</span>
+              </span>
+              <span class={`app-action ${app.status}`} aria-hidden="true">{action[app.status]}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <div class="breath">

@@ -10,8 +10,10 @@
 
 ### Changed
 
-- The homepage app list follows the App Store: real app icons, names and a
-  capsule showing whether each app is out, in beta, in review or coming soon.
+- The homepage apps are separate App Store-style cards: real app icons, names
+  and a capsule showing whether each app is out, in beta, in review or coming
+  soon. Cards lift gently on hover and settle when pressed.
+- Fork and Keel use the icon artwork from their App Store listings.
 - Fork's page has the 1.1.0 screenshots and describes bass, ukulele and 432 Hz.
 - App pages use each app's real icon where one exists.
 - llms.txt and llms-full.txt list Lune and Tide, Fork's new instruments and
