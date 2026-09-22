@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 type Status = 'live' | 'beta' | 'review' | 'soon';
-const action: Record<Status, string> = { live: 'View', beta: 'Beta', review: 'In review', soon: 'Soon' };
+const label: Record<Status, string> = { live: 'On the App Store', beta: 'Beta', review: 'In review', soon: 'Coming soon' };
 const statusText: Record<Status, string> = { live: 'on the App Store', beta: 'in TestFlight', review: 'in App Review', soon: 'coming soon' };
 
 // Grouped by where each app is, then in the order Al set. Live apps use the
@@ -18,6 +18,8 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
   { slug: 'grateful', name: 'Grateful', tagline: 'One thing, every day.', status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"> <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle> </svg>' },
   { slug: 'bare-minimum', name: 'Bare Minimum', tagline: "Three things. That's it.", status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"> <line x1="18" y1="22" x2="42" y2="22"></line> <line x1="18" y1="30" x2="42" y2="30"></line> <line x1="18" y1="38" x2="42" y2="38"></line> </svg>' },
 ];
+const live = apps.filter((app) => app.status === 'live');
+const coming = apps.filter((app) => app.status !== 'live');
 ---
 
 <BaseLayout title="Mono Studio - One thing, done well.">
@@ -146,112 +148,173 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
       animation: breatheIn 0.6s ease-out 3s forwards;
     }
 
-    /* App Store-style cards: one per app, real icons, a capsule that says where
-       the app is. Icons keep their own colours in dark mode, as on iOS. */
-    .app-grid {
+    /* Two tiers. What is on the App Store gets a feature tile: a big icon on a
+       glow taken from the icon itself, the name in the wordmark's serif. Beta and
+       coming-soon apps sit below as quieter compact tiles with a status dot, no
+       buttons. Icons keep their own colours in dark mode, as on iOS. */
+    .apps {
       --native: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Karla, system-ui, sans-serif;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* the cards arrive one after another, a breath apart, in reading order */
+    .app-grid > li,
+    .group-label {
       opacity: 0;
-      animation: breatheIn 0.6s ease-out 3.1s forwards;
+      animation: breatheIn 0.7s ease-out forwards;
+      animation-delay: calc(3.1s + var(--i, 0) * 0.08s);
+    }
+
+    .app-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+    .app-grid > li { display: flex; }
+    .app-grid .app-card { flex: 1; min-width: 0; }
+    .app-grid.featured { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    .app-grid.compact { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
+    /* set like the "Apps" label above it, one step quieter */
+    .group-label {
+      font-family: "Noto Serif JP", serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-align: center;
+      margin: 64px 0 24px;
     }
 
     .app-card {
       position: relative;
-      display: grid;
-      grid-template-columns: 76px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 18px 16px 16px;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
       color: inherit;
       text-decoration: none;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 26px;
       box-shadow: inset 0 1px 0 var(--glass-highlight), 0 1px 2px rgba(42, 42, 40, 0.04), 0 18px 40px -30px var(--glass-shadow);
       backdrop-filter: blur(22px) saturate(165%);
       -webkit-backdrop-filter: blur(22px) saturate(165%);
-      transition:
-        transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-        box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-        background-color 0.3s ease;
+      transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.3s ease;
+    }
+
+    /* the app's own colour, blurred into the top of its card */
+    .app-card::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -30% -10% auto;
+      height: 90%;
+      background: var(--icon) center / cover no-repeat;
+      filter: blur(46px) saturate(140%);
+      opacity: 0.22;
+      transition: opacity 0.5s var(--ease), transform 0.8s var(--ease);
     }
 
     .app-card:hover {
-      transform: translateY(-2px);
-      background-color: color-mix(in srgb, var(--card) 80%, var(--glass-highlight));
-      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 1px 2px rgba(42, 42, 40, 0.05), 0 26px 50px -30px var(--glass-shadow);
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--text) 16%, transparent);
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 1px 2px rgba(42, 42, 40, 0.05), 0 30px 60px -34px var(--glass-shadow);
     }
-
-    /* the iOS press: settle in, quickly */
+    .app-card:hover::before { opacity: 0.34; transform: scale(1.08); }
     .app-card:active { transform: scale(0.985); transition-duration: 0.12s; }
     .app-card:focus-visible { outline: 2px solid var(--text-soft); outline-offset: 3px; }
 
     .app-icon {
       position: relative;
-      width: 76px;
-      height: 76px;
+      flex: none;
+      width: 64px;
+      height: 64px;
       border-radius: 22.5%;
       overflow: hidden;
       background: #f4ede0;
       color: #2a2a28;
       display: grid;
       place-items: center;
-      box-shadow: 0 1px 1px rgba(42, 42, 40, 0.06), 0 8px 18px -12px rgba(42, 42, 40, 0.45);
+      box-shadow: 0 1px 1px rgba(42, 42, 40, 0.08), 0 10px 22px -12px rgba(42, 42, 40, 0.5);
+      transition: transform 0.6s var(--ease);
     }
-
     .app-icon::after {
       content: "";
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      box-shadow: inset 0 0 0 1px rgba(42, 42, 40, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(42, 42, 40, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
-
     .app-icon img { width: 100%; height: 100%; display: block; }
     .app-icon :global(svg) { width: 60%; height: 60%; display: block; }
 
     .app-name {
       display: block;
-      font-family: var(--native);
-      font-weight: 600;
-      font-size: 17px;
-      line-height: 1.25;
-      letter-spacing: -0.012em;
+      font-family: "Noto Serif JP", serif;
+      font-weight: 400;
+      letter-spacing: 0.01em;
       color: var(--text);
     }
-
     .app-tagline {
       display: block;
-      margin-top: 3px;
       font-family: var(--native);
-      font-size: 14px;
-      line-height: 1.35;
       color: var(--text-soft);
+      line-height: 1.4;
     }
 
-    .app-action {
-      min-width: 76px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-family: var(--native);
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 1;
-      text-align: center;
-      white-space: nowrap;
-      color: var(--text-soft);
-      background-color: color-mix(in srgb, var(--text) 7%, transparent);
-      transition: background-color 0.3s ease;
+    /* ---- featured: live on the App Store ---- */
+    .featured .app-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 28px 26px 22px;
+      border-radius: 30px;
     }
+    .featured .app-icon { width: 88px; height: 88px; margin-bottom: 22px; }
+    .featured .app-card:hover .app-icon { transform: translateY(-2px) rotate(-3deg) scale(1.04); }
+    .featured .app-name { font-size: 24px; line-height: 1.2; }
+    .featured .app-tagline { margin-top: 6px; font-size: 15px; }
 
-    .app-action.live { color: var(--sage-deep); background-color: var(--sage-soft); }
-    .app-action.beta { color: color-mix(in srgb, var(--amber) 62%, var(--text)); background-color: color-mix(in srgb, var(--amber) 16%, transparent); }
-    .app-card:hover .app-action { background-color: color-mix(in srgb, currentColor 20%, transparent); }
+    .app-store {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: auto;
+      padding-top: 22px;
+      font-family: var(--native);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--sage-deep);
+    }
+    .app-store .rule { flex: 1; height: 1px; background: var(--border); }
+    .app-store svg { width: 14px; height: 14px; transition: transform 0.5s var(--ease); }
+    .app-card:hover .app-store svg { transform: translateX(4px); }
+
+    .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--sage); box-shadow: 0 0 0 3px var(--sage-soft); }
+    .dot.beta { background: var(--amber); box-shadow: 0 0 0 3px color-mix(in srgb, var(--amber) 20%, transparent); }
+    .dot.soon { background: var(--stone); box-shadow: none; }
+
+    /* ---- compact: beta and coming soon ---- */
+    .compact .app-card {
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px 14px 14px;
+      border-radius: 22px;
+    }
+    .compact .app-card::before { opacity: 0.14; }
+    .compact .app-card:hover::before { opacity: 0.24; }
+    .compact .app-card:hover .app-icon { transform: scale(1.05); }
+    .compact .app-icon { width: 52px; height: 52px; }
+    .compact .app-name { font-size: 16px; line-height: 1.3; }
+    .compact .app-tagline { margin-top: 2px; font-size: 13px; }
+    .compact .soon .app-icon { filter: saturate(0.6); opacity: 0.85; transition: transform 0.6s var(--ease), filter 0.4s ease, opacity 0.4s ease; }
+    .compact .soon:hover .app-icon { filter: none; opacity: 1; }
+
+    .app-status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 6px;
+      font-family: var(--native);
+      font-size: 12px;
+      color: var(--text-faint);
+    }
 
     /* ---- Footer ---- */
     .footer {
@@ -292,29 +355,44 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
 
     .footer-copy a:hover { color: var(--text-soft); }
 
+    @media (max-width: 900px) and (min-width: 681px) {
+      .app-grid.compact { grid-template-columns: 1fr 1fr; }
+      .featured .app-card { padding: 24px 20px 20px; }
+    }
+
     @media (max-width: 680px) {
       .hero { padding: 80px 0 0; }
       .wordmark { font-size: 30px; }
       .philosophy { font-size: 15px; }
       .breath { padding: 56px 0; }
-      .app-grid { grid-template-columns: 1fr; gap: 12px; }
-      .app-card { grid-template-columns: 64px minmax(0, 1fr) auto; gap: 14px; padding: 14px 16px 14px 14px; border-radius: 22px; }
-      .app-icon { width: 64px; height: 64px; }
-      .app-action { min-width: 0; padding: 8px 14px; }
+      .app-grid.featured, .app-grid.compact { grid-template-columns: 1fr; gap: 12px; }
+      .featured .app-card { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0 16px; padding: 18px 18px 16px; border-radius: 24px; }
+      .featured .app-icon { width: 68px; height: 68px; margin: 0; }
+      .featured .app-text { flex: 1; min-width: 0; }
+      .featured .app-name { font-size: 20px; }
+      .featured .app-tagline { font-size: 14px; }
+      .app-store { flex-basis: 100%; padding-top: 14px; }
+      .group-label { margin: 44px 0 16px; }
       .container { padding: 0 24px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .app-card,
-      .app-action { transition: none; }
+      .app-card::before,
+      .app-icon,
+      .app-store svg { transition: none; }
       .app-card:hover,
-      .app-card:active { transform: none; }
+      .app-card:active,
+      .app-card:hover::before,
+      .app-card:hover .app-icon,
+      .app-card:hover .app-store svg { transform: none; }
     }
 
     :global(:root[data-home-return]) .fade-in,
     :global(:root[data-home-return]) .breath,
     :global(:root[data-home-return]) .section-label,
-    :global(:root[data-home-return]) .app-grid,
+    :global(:root[data-home-return]) .app-grid > li,
+    :global(:root[data-home-return]) .group-label,
     :global(:root[data-home-return]) .footer {
       opacity: 1;
       animation: none;
@@ -363,22 +441,47 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
 
     <section class="apps-section">
       <p class="section-label">Apps</p>
-      <ul class="app-grid">
-        {apps.map((app) => (
-          <li>
-            <a href={`/${app.slug}`} class="app-card" aria-label={`${app.name}, ${statusText[app.status]}`}>
-              <span class="app-icon" aria-hidden="true">
-                {app.icon ? <img src={app.icon} alt="" width="76" height="76" /> : <Fragment set:html={app.glyph} />}
-              </span>
-              <span>
-                <span class="app-name">{app.name}</span>
-                <span class="app-tagline">{app.tagline}</span>
-              </span>
-              <span class={`app-action ${app.status}`} aria-hidden="true">{action[app.status]}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div class="apps">
+        <ul class="app-grid featured">
+          {live.map((app, i) => (
+            <li style={`--i: ${i}`}>
+              <a href={`/${app.slug}`} class="app-card" style={app.icon ? `--icon: url(${app.icon})` : undefined} aria-label={`${app.name}, ${statusText[app.status]}`}>
+                <span class="app-icon" aria-hidden="true">
+                  {app.icon ? <img src={app.icon} alt="" width="88" height="88" /> : <Fragment set:html={app.glyph} />}
+                </span>
+                <span class="app-text">
+                  <span class="app-name">{app.name}</span>
+                  <span class="app-tagline">{app.tagline}</span>
+                </span>
+                <span class="app-store" aria-hidden="true">
+                  <span class="dot"></span>
+                  On the App Store
+                  <span class="rule"></span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <p class="group-label" style={`--i: ${live.length}`}>In the works</p>
+        <ul class="app-grid compact">
+          {coming.map((app, i) => (
+            <li style={`--i: ${live.length + 1 + i}`}>
+              <a href={`/${app.slug}`} class={`app-card ${app.status}`} style={app.icon ? `--icon: url(${app.icon})` : undefined} aria-label={`${app.name}, ${statusText[app.status]}`}>
+                <span class="app-icon" aria-hidden="true">
+                  {app.icon ? <img src={app.icon} alt="" width="52" height="52" loading="lazy" /> : <Fragment set:html={app.glyph} />}
+                </span>
+                <span class="app-text">
+                  <span class="app-name">{app.name}</span>
+                  <span class="app-tagline">{app.tagline}</span>
+                  <span class="app-status" aria-hidden="true"><span class={`dot ${app.status}`}></span>{label[app.status]}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
 
     <div class="breath">

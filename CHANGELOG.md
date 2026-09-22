@@ -10,6 +10,11 @@
 
 ### Changed
 
+- The homepage apps are in two tiers. Apps on the App Store get large feature
+  cards, with a glow taken from each icon, the name in the wordmark's serif and
+  an "On the App Store" line. Beta and coming-soon apps sit under "In the works"
+  as quieter compact cards with a status dot instead of a button. The cards
+  arrive one after another.
 - Bins is marked live, links to its App Store page, and shows cleaner screenshots.
 - Keel's gallery uses the six current 1.1.0 framed screenshots.
 - The homepage apps are separate App Store-style cards: real app icons, names
