@@ -6,7 +6,7 @@ Mono Studio makes focused iPhone apps for daily practice. Each app does one usef
 
 See the trend.
 
-A weight tracker without the noise. Enter one number a day and follow a quiet line showing the trend over time. No accounts, no cloud and no notifications nagging you to log. Nothing leaves your device. Keel is available on the App Store.
+A weight tracker without the noise. Enter one number a day and follow your seven-day average over time. No accounts, no cloud and no notifications nagging you to log. Nothing leaves your device. Keel is available on the App Store.
 
 Page: https://monostudio.site/keel
 
@@ -38,7 +38,7 @@ Page: https://monostudio.site/enso
 
 Bin day, sorted.
 
-Set a local collection schedule once and receive a quiet reminder the night before. Recycling, general and garden collections are kept together. Bins is in App Review.
+Set a local collection schedule once and get a reminder the night before each collection. Recycling, general and garden collections are kept together. Bins is on the App Store.
 
 Page: https://monostudio.site/bins
 
@@ -54,7 +54,7 @@ Page: https://monostudio.site/tide
 
 One a day. Did you?
 
-A simple reminder for one daily medicine. Confirm it once and the day goes quiet. Dose is coming soon.
+A simple reminder for one daily medicine. Tap to confirm you took it today. Dose is coming soon.
 
 Page: https://monostudio.site/dose
 

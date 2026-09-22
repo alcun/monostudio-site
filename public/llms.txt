@@ -10,7 +10,7 @@ Mono Studio makes small apps that do one useful thing, take seconds to use and k
 - [Fork](https://monostudio.site/fork): A tuner for guitar, bass and ukulele, with a chromatic mode and adjustable reference pitch. Available on the App Store.
 - [Lune](https://monostudio.site/lune): Explore the Moon in 3D, with phases, rise and set times and a moon calendar. In TestFlight.
 - [Enso](https://monostudio.site/enso): Draw one circle each day and watch the year fill in. In TestFlight.
-- [Bins](https://monostudio.site/bins): A quiet reminder for local bin collection days. In App Review.
+- [Bins](https://monostudio.site/bins): See which bin goes out next and get a reminder before collection day. On the App Store.
 - [Tide](https://monostudio.site/tide): Tide times for your stretch of coast. Coming soon.
 - [Dose](https://monostudio.site/dose): A simple daily medicine reminder. Coming soon.
 - [Grateful](https://monostudio.site/grateful): A private one-line gratitude journal. Coming soon.
