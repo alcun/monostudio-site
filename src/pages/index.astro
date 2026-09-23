@@ -11,12 +11,12 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
   { slug: 'fork', name: 'Fork', tagline: 'Guitar, bass and ukulele', status: 'live', icon: '/icons/fork.png' },
   { slug: 'keel', name: 'Keel', tagline: 'See the trend.', status: 'live', icon: '/icons/keel.png' },
   { slug: 'bins', name: 'Bins', tagline: 'Did you take the bins out?', status: 'live', icon: '/icons/bins.png' },
-  { slug: 'dalen', name: 'Dalen', tagline: 'One sheet for everything.', status: 'beta', icon: '/icons/dalen.png' },
+  { slug: 'dalen', name: 'Dalen', tagline: 'Your notes, on the Lock Screen.', status: 'beta', icon: '/icons/dalen.png' },
   { slug: 'lune', name: 'Lune', tagline: 'Moon phases and calendar', status: 'beta', icon: '/icons/lune.png' },
   { slug: 'enso', name: 'Enso', tagline: 'One stroke, every day.', status: 'beta', icon: '/icons/enso.png' },
   { slug: 'tide', name: 'Tide', tagline: 'Tide times for your coast', status: 'soon', icon: '/icons/tide.png' },
-  { slug: 'dose', name: 'Dose', tagline: 'One a day. Did you?', status: 'soon', icon: '/icons/dose.png' },
-  { slug: 'grateful', name: 'Grateful', tagline: 'One thing, every day.', status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"> <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle> </svg>' },
+  { slug: 'dose', name: 'Dose', tagline: 'Did you take it today?', status: 'soon', icon: '/icons/dose.png' },
+  { slug: 'grateful', name: 'Grateful', tagline: 'A line of thanks a day.', status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"> <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle> </svg>' },
   { slug: 'bare-minimum', name: 'Bare Minimum', tagline: "Three things. That's it.", status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"> <line x1="18" y1="22" x2="42" y2="22"></line> <line x1="18" y1="30" x2="42" y2="30"></line> <line x1="18" y1="38" x2="42" y2="38"></line> </svg>' },
 ];
 const live = apps.filter((app) => app.status === 'live');

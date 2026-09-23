@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-23
+
+### Changed
+
+- Dalen, Dose and Grateful have taglines that say what the app does, instead of
+  five variations on "one thing". The studio line and Enso keep theirs.
+- Plainer blurbs for Enso, Dose and Grateful.
+
 ## Unreleased
 
 ### Added

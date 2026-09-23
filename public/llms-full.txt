@@ -30,7 +30,7 @@ Page: https://monostudio.site/lune
 
 One stroke, every day.
 
-A daily practice in a single gesture. Draw one circle a day and watch the year fill in. No accounts and no cloud, just the habit. Enso is in TestFlight.
+A daily practice in a single gesture. Draw one circle a day and watch the year fill in. No account, and nothing leaves your phone. Enso is in TestFlight.
 
 Page: https://monostudio.site/enso
 
@@ -52,7 +52,7 @@ Page: https://monostudio.site/tide
 
 ## Dose
 
-One a day. Did you?
+Did you take it today?
 
 A simple reminder for one daily medicine. Tap to confirm you took it today. Dose is coming soon.
 
@@ -60,7 +60,7 @@ Page: https://monostudio.site/dose
 
 ## Grateful
 
-One thing, every day.
+A line of thanks a day.
 
 A gratitude journal reduced to one private line each day. Grateful is coming soon.
 
