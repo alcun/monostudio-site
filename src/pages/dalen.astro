@@ -1,5 +1,6 @@
 ---
 import AppLayout from '../layouts/AppLayout.astro';
+import ScreenshotGallery from '../components/ScreenshotGallery.astro';
 ---
 
 <AppLayout
@@ -8,4 +9,13 @@ import AppLayout from '../layouts/AppLayout.astro';
   description="Write it down once and keep it on your Lock Screen. No account, works offline."
   status="on testflight"
   icon="/icons/dalen.png"
-/>
+>
+  <ScreenshotGallery images={[
+    { src: '/dalen/1-every-scrap.jpg', thumb: '/dalen/thumb/1-every-scrap.jpg', alt: 'Dalen - every scrap of paper on one sheet', width: 1320, height: 2868 },
+    { src: '/dalen/2-lock-screen.jpg', thumb: '/dalen/thumb/2-lock-screen.jpg', alt: 'Dalen - the sheet pinned to the Lock Screen', width: 1320, height: 2868 },
+    { src: '/dalen/3-write.jpg', thumb: '/dalen/thumb/3-write.jpg', alt: 'Dalen - writing straight away, with the keyboard up', width: 1320, height: 2868 },
+    { src: '/dalen/4-widget.jpg', thumb: '/dalen/thumb/4-widget.jpg', alt: 'Dalen - a Home Screen widget showing the sheet', width: 1320, height: 2868 },
+    { src: '/dalen/5-earlier-versions.jpg', thumb: '/dalen/thumb/5-earlier-versions.jpg', alt: 'Dalen - earlier versions of the sheet', width: 1320, height: 2868 },
+    { src: '/dalen/6-light-dark.jpg', thumb: '/dalen/thumb/6-light-dark.jpg', alt: 'Dalen - light and dark', width: 1320, height: 2868 },
+  ]} />
+</AppLayout>

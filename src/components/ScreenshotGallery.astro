@@ -6,6 +6,8 @@ interface ImageItem {
   alt: string;
   width: number;
   height: number;
+  /** A half-size copy for the strip; the lightbox always opens `src`. */
+  thumb?: string;
 }
 
 interface Props { images: ImageItem[]; }
@@ -25,7 +27,12 @@ const { images } = Astro.props;
         data-h={image.height}
         aria-label={`View larger: ${image.alt}`}
       >
-        <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+        <img
+          src={image.thumb ?? image.src}
+          srcset={image.thumb ? `${image.thumb} ${image.width / 2}w, ${image.src} ${image.width}w` : undefined}
+          sizes={image.thumb ? '(max-width: 600px) 45vw, 220px' : undefined}
+          alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async"
+        />
       </button>
     ))}
   </div>
