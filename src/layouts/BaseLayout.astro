@@ -10,6 +10,12 @@ import '@fontsource/noto-serif-jp/latin-300.css';
 import '@fontsource/noto-serif-jp/latin-400.css';
 import '@fontsource/karla/latin-300.css';
 import '@fontsource/karla/latin-400.css';
+// The headings are Noto Serif JP 200 and 300. Preloaded so they are usually
+// there for the first paint, and when they are not, the fallback below is
+// Georgia scaled to Noto's width and line box, so the swap does not move the
+// page. Measured 23 September 2026 with fontTools.
+import notoLight from '@fontsource/noto-serif-jp/files/noto-serif-jp-latin-200-normal.woff2?url';
+import notoBook from '@fontsource/noto-serif-jp/files/noto-serif-jp-latin-300-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -45,6 +51,8 @@ const structuredData = schema ?? {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f4ede0" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#1d1e27" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href={notoLight} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={notoBook} as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -70,6 +78,15 @@ const structuredData = schema ?? {
       }
     </script>
     <style>
+      @font-face {
+        font-family: "Noto Serif JP Fallback";
+        src: local("Georgia");
+        size-adjust: 109.5%;
+        ascent-override: 105.1%;
+        descent-override: 26.1%;
+        line-gap-override: 0%;
+      }
+
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
