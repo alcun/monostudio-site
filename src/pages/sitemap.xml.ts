@@ -4,6 +4,7 @@ const routes = [
   'fork',
   'enso',
   'bins',
+  'dalen',
   'lune',
   'tide',
   'dose',
