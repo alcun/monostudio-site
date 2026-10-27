@@ -12,8 +12,14 @@
 - A short last row of apps sits in the middle instead of hanging to the left.
 - Lune's card is no longer greyed by its dark icon.
 
+### Removed
+
+- The coming soon apps (Tide, Dose, Grateful and Bare Minimum), from the
+  homepage, their pages and the sitemap. The site lists only apps you can get.
+
 ### Fixed
 
+- Dalen was missing from llms.txt and llms-full.txt.
 - On phones, tapping a card or button no longer leaves it stuck lifted, and the
   grey tap flash is gone.
 

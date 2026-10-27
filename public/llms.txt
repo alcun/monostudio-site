@@ -11,10 +11,7 @@ Mono Studio makes small apps that do one useful thing, take seconds to use and k
 - [Lune](https://monostudio.site/lune): Explore the Moon in 3D, with phases, rise and set times and a moon calendar. In TestFlight.
 - [Enso](https://monostudio.site/enso): Draw one circle each day and watch the year fill in. In TestFlight.
 - [Bins](https://monostudio.site/bins): See which bin goes out next and get a reminder before collection day. On the App Store.
-- [Tide](https://monostudio.site/tide): Tide times for your stretch of coast. Coming soon.
-- [Dose](https://monostudio.site/dose): A simple daily medicine reminder. Coming soon.
-- [Grateful](https://monostudio.site/grateful): A private one-line gratitude journal. Coming soon.
-- [Bare Minimum](https://monostudio.site/bare-minimum): A daily list limited to three things. Coming soon.
+- [Dalen](https://monostudio.site/dalen): One sheet of notes you can pin to your Lock Screen. Available on the App Store.
 
 ## Policies and contact
 

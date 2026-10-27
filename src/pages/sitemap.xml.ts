@@ -6,10 +6,6 @@ const routes = [
   'bins',
   'dalen',
   'lune',
-  'tide',
-  'dose',
-  'grateful',
-  'bare-minimum',
   'about',
   'privacy',
 ];

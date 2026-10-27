@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-type Status = 'live' | 'beta' | 'review' | 'soon';
-const label: Record<Status, string> = { live: 'On the App Store', beta: 'Beta', review: 'In review', soon: 'Coming soon' };
-const statusText: Record<Status, string> = { live: 'on the App Store', beta: 'in TestFlight', review: 'in App Review', soon: 'coming soon' };
+type Status = 'live' | 'beta' | 'review';
+const label: Record<Status, string> = { live: 'On the App Store', beta: 'Beta', review: 'In review' };
+const statusText: Record<Status, string> = { live: 'on the App Store', beta: 'in TestFlight', review: 'in App Review' };
 
 // Grouped by where each app is, then in the order Al set. Live apps use the
 // artwork from their App Store listing; the rest use the project's icon.png.
@@ -15,14 +15,9 @@ const apps: { slug: string; name: string; tagline: string; status: Status; icon?
   { slug: 'dalen', name: 'Dalen', tagline: 'Your notes, on the Lock Screen.', status: 'live', icon: '/icons/dalen.png' },
   { slug: 'lune', name: 'Lune', tagline: 'Moon phases and calendar', status: 'beta', icon: '/icons/lune.png', dark: true },
   { slug: 'enso', name: 'Enso', tagline: 'One stroke, every day.', status: 'beta', icon: '/icons/enso.png' },
-  { slug: 'tide', name: 'Tide', tagline: 'Tide times for your coast', status: 'soon', icon: '/icons/tide.png' },
-  { slug: 'dose', name: 'Dose', tagline: 'Did you take it today?', status: 'soon', icon: '/icons/dose.png' },
-  { slug: 'grateful', name: 'Grateful', tagline: 'A line of thanks a day.', status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"> <circle cx="30" cy="30" r="3.5" fill="currentColor"></circle> </svg>' },
-  { slug: 'bare-minimum', name: 'Bare Minimum', tagline: "Three things. That's it.", status: 'soon', glyph: '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"> <line x1="18" y1="22" x2="42" y2="22"></line> <line x1="18" y1="30" x2="42" y2="30"></line> <line x1="18" y1="38" x2="42" y2="38"></line> </svg>' },
 ];
 const live = apps.filter((app) => app.status === 'live');
 const beta = apps.filter((app) => app.status === 'beta' || app.status === 'review');
-const soon = apps.filter((app) => app.status === 'soon');
 ---
 
 <BaseLayout title="Mono Studio - One thing, done well.">
@@ -151,10 +146,10 @@ const soon = apps.filter((app) => app.status === 'soon');
       animation: breatheIn 0.6s var(--ease-out) 0.65s forwards;
     }
 
-    /* Three tiers, each quieter than the last. What is on the App Store gets a
-       feature tile: a big icon on a glow taken from the icon itself, the name in
-       the wordmark's serif. Beta apps are compact tiles with a status dot; coming
-       soon is a row of small tiles. No buttons. Icons keep their own colours in
+    /* Two tiers, the second quieter. What is on the App Store gets a feature
+       tile: a big icon on a glow taken from the icon itself, the name in the
+       wordmark's serif. Beta apps are compact tiles with a status dot. Nothing
+       unbuilt is listed. No buttons. Icons keep their own colours in
        dark mode, as on iOS. */
     .apps {
       --native: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Karla, system-ui, sans-serif;
@@ -289,7 +284,6 @@ const soon = apps.filter((app) => app.status === 'soon');
 
     .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--sage); box-shadow: 0 0 0 3px var(--sage-soft); }
     .dot.beta { background: var(--amber); box-shadow: 0 0 0 3px color-mix(in srgb, var(--amber) 20%, transparent); }
-    .dot.soon { background: var(--stone); box-shadow: none; }
 
     /* ---- compact: in beta ---- */
     .compact .app-card {
@@ -303,27 +297,6 @@ const soon = apps.filter((app) => app.status === 'soon');
     .compact .app-icon { width: 52px; height: 52px; }
     .compact .app-name { font-size: 16px; line-height: 1.3; }
     .compact .app-tagline { margin-top: 2px; font-size: 13px; }
-    /* ---- mini: coming soon, the quietest tier ---- */
-    .app-grid.mini { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-    /* no card until you reach for one: a row of icons, like a dock */
-    .mini .app-card {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 14px 10px 12px;
-      border-radius: 20px;
-      background: transparent;
-      border-color: transparent;
-      box-shadow: none;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-    .mini .app-card::before { opacity: 0; }
-    .mini .app-icon { width: 48px; height: 48px; margin-bottom: 10px; filter: saturate(0.6); opacity: 0.85; transition: transform 0.25s var(--ease), filter 0.25s ease, opacity 0.25s ease; }
-    .mini .app-name { font-size: 15px; line-height: 1.3; }
-    .mini .app-tagline { margin-top: 3px; font-size: 12px; }
-
-    .compact .soon .app-icon { filter: saturate(0.6); opacity: 0.85; transition: transform 0.25s var(--ease), filter 0.25s ease, opacity 0.25s ease; }
 
     .app-status {
       display: flex;
@@ -383,7 +356,6 @@ const soon = apps.filter((app) => app.status === 'soon');
       .breath { padding: 56px 0; }
       .app-grid.featured, .app-grid.compact { gap: 12px; }
       .app-grid.featured > li, .app-grid.compact > li { flex-basis: 100%; }
-      .app-grid.mini { grid-template-columns: 1fr 1fr; gap: 10px; }
       .featured .app-card { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0 16px; padding: 18px 18px 16px; border-radius: 24px; }
       .featured .app-icon { width: 68px; height: 68px; margin: 0; }
       .featured .app-text { flex: 1; min-width: 0; }
@@ -408,14 +380,6 @@ const soon = apps.filter((app) => app.status === 'soon');
       .compact .app-card:hover::before { opacity: 0.24; }
       .compact .app-card.dark:hover::before { opacity: 0.1; }
       .compact .app-card:hover .app-icon { transform: scale(1.05); }
-      .mini .app-card:hover {
-        background: var(--card);
-        border-color: var(--border);
-        box-shadow: inset 0 1px 0 var(--glass-highlight), 0 18px 40px -30px var(--glass-shadow);
-      }
-      .mini .app-card:hover::before { opacity: 0.12; }
-      .mini .app-card:hover .app-icon { filter: none; opacity: 1; transform: scale(1.05); }
-      .compact .soon:hover .app-icon { filter: none; opacity: 1; }
       .footer-links a:hover { color: var(--text-soft); }
       .footer-copy a:hover { color: var(--text-soft); }
     }
@@ -528,20 +492,6 @@ const soon = apps.filter((app) => app.status === 'soon');
           ))}
         </ul>
 
-        <p class="group-label" style={`--i: ${live.length + beta.length + 1}`}>Coming soon</p>
-        <ul class="app-grid mini">
-          {soon.map((app, i) => (
-            <li style={`--i: ${live.length + beta.length + 2 + i}`}>
-              <a href={`/${app.slug}`} class="app-card soon" style={app.icon ? `--icon: url(${app.icon})` : undefined} aria-label={`${app.name}, ${statusText[app.status]}`}>
-                <span class="app-icon" aria-hidden="true">
-                  {app.icon ? <img src={app.icon} alt="" width="48" height="48" loading="lazy" /> : <Fragment set:html={app.glyph} />}
-                </span>
-                <span class="app-name">{app.name}</span>
-                <span class="app-tagline">{app.tagline}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
 

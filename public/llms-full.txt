@@ -42,37 +42,13 @@ Set a local collection schedule once and get a reminder the night before each co
 
 Page: https://monostudio.site/bins
 
-## Tide
+## Dalen
 
-Tide times for your coast.
+Your notes, on the Lock Screen.
 
-High and low water for a stretch of coast, with the water rising and falling on screen and a globe for picking a place. Tide is coming soon.
+One sheet for the things you need to remember. It saves as you type, can be pinned to the Lock Screen while you need it, shows on a Home Screen widget and keeps earlier versions. No account, and the sheet stays on your iPhone and works offline. Dalen is available on the App Store.
 
-Page: https://monostudio.site/tide
-
-## Dose
-
-Did you take it today?
-
-A simple reminder for one daily medicine. Tap to confirm you took it today. Dose is coming soon.
-
-Page: https://monostudio.site/dose
-
-## Grateful
-
-A line of thanks a day.
-
-A gratitude journal reduced to one private line each day. Grateful is coming soon.
-
-Page: https://monostudio.site/grateful
-
-## Bare Minimum
-
-Three things. That's it.
-
-A daily to-do list that cannot grow beyond three items. Bare Minimum is coming soon.
-
-Page: https://monostudio.site/bare-minimum
+Page: https://monostudio.site/dalen
 
 ## Privacy
 
