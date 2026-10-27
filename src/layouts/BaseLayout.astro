@@ -90,6 +90,7 @@ const structuredData = schema ?? {
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
         color-scheme: light;
         --bg: #f4ede0;
         --bg-deep: #ebe0cd;
@@ -154,7 +155,8 @@ const structuredData = schema ?? {
         }
       }
 
-      html { background: var(--bg); color: var(--text); }
+      html { background: var(--bg); color: var(--text); -webkit-tap-highlight-color: transparent; }
+      a, button { touch-action: manipulation; }
       body {
         font-family: "Karla", sans-serif;
         background: var(--bg);
@@ -219,10 +221,12 @@ const structuredData = schema ?? {
         display: grid;
         place-items: center;
         padding: 0;
-        transition: transform 0.25s ease, color 0.25s ease;
+        transition: transform 0.2s var(--ease-out), color 0.2s ease;
       }
 
-      .theme-toggle:hover { color: var(--text); transform: translateY(-2px); }
+      @media (hover: hover) and (pointer: fine) {
+        .theme-toggle:hover { color: var(--text); transform: translateY(-2px); }
+      }
       .theme-toggle:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
       .theme-toggle svg { width: 18px; height: 18px; }
       .theme-toggle .moon { display: block; }

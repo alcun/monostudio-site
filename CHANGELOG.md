@@ -6,6 +6,16 @@
 
 - Dalen is on the App Store: its card moves up with the live apps and its page
   links to the listing.
+- The homepage shows the apps while the ensō is still being drawn, instead of
+  after a three-second wait.
+- Hovering a card is quicker and snappier, and every animation shares one curve.
+- A short last row of apps sits in the middle instead of hanging to the left.
+- Lune's card is no longer greyed by its dark icon.
+
+### Fixed
+
+- On phones, tapping a card or button no longer leaves it stuck lifted, and the
+  grey tap flash is gone.
 
 ## 2026-09-23
 

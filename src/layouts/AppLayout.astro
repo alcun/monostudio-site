@@ -65,8 +65,8 @@ const appSchema = {
       transition: color 0.3s ease;
     }
     .back:hover { color: var(--text); }
-    .back svg { width: 16px; transition: transform 0.3s ease; }
-    .back:hover svg { transform: translateX(-3px); }
+    .back svg { width: 16px; transition: transform 0.2s var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) { .back:hover svg { transform: translateX(-3px); } }
 
     .app-header { display: flex; align-items: center; gap: 20px; margin-top: 52px; }
     .app-icon-tile {
@@ -134,8 +134,8 @@ const appSchema = {
     }
     .app-store-link:hover { background-color: color-mix(in srgb, var(--sage-soft) 72%, var(--sage)); border-color: color-mix(in srgb, var(--sage) 52%, var(--border)); color: var(--sage-deep); box-shadow: inset 0 1px 0 var(--glass-highlight), 0 14px 28px -22px var(--sage); }
     .app-store-mark { width: 15px; height: 15px; flex-shrink: 0; }
-    .app-store-arrow { width: 16px; transition: transform 0.2s cubic-bezier(0.2, 0.75, 0.25, 1); }
-    .app-store-link:hover .app-store-arrow { transform: translateX(2px); }
+    .app-store-arrow { width: 16px; transition: transform 0.2s var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) { .app-store-link:hover .app-store-arrow { transform: translateX(2px); } }
 
     .screens { margin-top: 64px; }
     .screens :global(> div) { margin: 0 !important; }
