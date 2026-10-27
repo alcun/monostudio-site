@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Dalen is on the App Store: its card moves up with the live apps and its page
+  links to the listing.
+
 ## 2026-09-23
 
 ### Changed
